@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/providers/send_otp_provider.dart';
+
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/utilities/extension.dart';
 import 'package:jiveda_appointment/utilities/input_formatters.dart';
@@ -7,10 +7,12 @@ import 'package:jiveda_appointment/widgets/custom_image.dart';
 import 'package:jiveda_appointment/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../utilities/image_data.dart';
-import '../../utilities/validators.dart';
-import '../../widgets/custom_button.dart';
-import '../../widgets/custom_text.dart';
+import '../../../utilities/image_data.dart';
+import '../../../utilities/validators.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_text.dart';
+import '../../providers/send_otp_provider.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

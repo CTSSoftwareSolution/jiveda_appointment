@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/providers/multi_provider.dart';
-import 'package:jiveda_appointment/screens/splash/splash_screen.dart';
+
+import 'Presentation/providers/multi_provider.dart';
+import 'Presentation/screens/splash/splash_screen.dart';
+
 
 
 void main() {

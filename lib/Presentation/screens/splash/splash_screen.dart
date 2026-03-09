@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/providers/splash_screen_provider.dart';
+
 import 'package:provider/provider.dart';
+
+import '../../providers/splash_screen_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

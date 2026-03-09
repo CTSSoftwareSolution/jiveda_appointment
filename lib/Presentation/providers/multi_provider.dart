@@ -1,10 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/providers/send_otp_provider.dart';
-import 'package:jiveda_appointment/providers/splash_screen_provider.dart';
+import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
+import 'package:jiveda_appointment/Presentation/providers/splash_screen_provider.dart';
+
 import 'package:provider/provider.dart';
 
-import '../main.dart';
+import '../../main.dart';
+
+
 
 
 class MultipleProvider extends StatelessWidget {
