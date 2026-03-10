@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/utilities/otp_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/otp_timer_provider.dart';
@@ -9,8 +10,7 @@ import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/utilities/extension.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  final String mobileNumber;
-  const OtpVerificationScreen({super.key, required this.mobileNumber});
+  const OtpVerificationScreen({super.key});
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -45,6 +45,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final mobileNumber = context.watch<SendOtpProvider>().mobileNumber;
+    final otpSeconds = context.watch<OtpTimerProvider>().seconds;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -72,8 +74,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     height: 1.4,
                   ),
                   children: [
-                    TextSpan(text: "We have sent a verification code to\n+91 - ${widget.mobileNumber}  ",),
-                    TextSpan(text: "(Edit?)", style: const TextStyle(color: textColor),
+                    TextSpan(
+                      text:
+                          "We have sent a verification code to\n+91 - $mobileNumber  ",
+                    ),
+                    TextSpan(
+                      text: "(Edit?)",
+                      style: const TextStyle(color: textColor),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Navigator.pop(context);
@@ -85,19 +92,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               35.height,
               OtpFieldRow(controllers: controllers, focusNodes: focusNodes),
               20.height,
-              Center(
-                child: Consumer<OtpTimerProvider>(
-                  builder: (context, timerProvider, child) {
-                    return CustomText(
-                      text: timerProvider.seconds == 0
-                          ? "Resend OTP"
-                          : "Resend in 00:${timerProvider.seconds.toString().padLeft(2, '0')}",
-                      fontSize: 14,
-                      textColor: blackColor,
-                    );
-                  },
-                ),
+               Center(
+              child: CustomText(
+                text: otpSeconds == 0
+                    ? "Resend OTP"
+                    : "Resend in 00:${otpSeconds.toString().padLeft(2, '0')}",
+                fontSize: 14,
+                textColor: blackColor,
               ),
+            ),
               40.height,
               CustomButton(
                 height: 50,
