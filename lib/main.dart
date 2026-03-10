@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
 
 import 'Presentation/providers/multi_provider.dart';
-import 'Presentation/screens/splash/splash_screen.dart';
+
 
 
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SplashScreen()
+      home: AppointmentScreen()
     );
   }
 }
