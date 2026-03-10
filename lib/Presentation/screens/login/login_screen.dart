@@ -5,11 +5,9 @@ import 'package:jiveda_appointment/Presentation/screens/OtpVerificationScreen/ot
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/utilities/extension.dart';
 import 'package:jiveda_appointment/utilities/input_formatters.dart';
-import 'package:jiveda_appointment/widgets/custom_image.dart';
 import 'package:jiveda_appointment/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 
-import '../../../utilities/image_data.dart';
 import '../../../utilities/validators.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text.dart';
@@ -60,85 +58,64 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         17.height,
                         const CustomText(
-                          text: "Log in or sign up to MahaSBM Client",
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
+                          text: "Log in or sign up to Jiveda Appointment",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17,
                         ),
                         10.height,
                         const CustomText(
                           text: "We will send you one time OTP on\nthis mobile number",
                           fontSize: 14,
-                          textColor: textHintColor,
+                          textColor: blackColor,
                         ),
                         30.height,
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                CustomImage(
-                                  image: indiaFlag,
-                                  width: 30,
-                                  height: 30,
-                                  fit: BoxFit.contain,
-                                ),
-                                const SizedBox(width: 12),
-                                const CustomText(
-                                  text: "+91 -",
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ],
+                        SizedBox(
+                          width: double.infinity,
+                          child: CustomTextField(
+                            controller: mobileController,
+                            hint: "0000000000",
+                            readOnly: false,
+                            keyboardType: TextInputType.number,
+                            textCapitalization: TextCapitalization.none,
+                            fillColor: scaffoldBgColor,
+                            inputFormatters: InputFormatters.mobileNumber,
+                            validator: (value) =>
+                                Validators.mobileValidation(value!, context),
+                            hintStyle: const TextStyle(
+                              color: textHintColor,
+                              fontSize: 14,
                             ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: CustomTextField(
-                                controller: mobileController,
-                                hint: "0000000000",
-                                readOnly: false,
-                                keyboardType: TextInputType.number,
-                                textCapitalization: TextCapitalization.none,
-                                fillColor: scaffoldBgColor,
-                                inputFormatters: InputFormatters.mobileNumber,
-                                validator: (value) => Validators.mobileValidation(value!, context),
-                                hintStyle: const TextStyle(
-                                  color: textHintColor,
-                                  fontSize: 14,
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                ),
-                                onChanged: (value) {
-                                  setState(() {
-                                    isButtonEnabled = value.length == 10;
-                                  });
-                                },
-                              ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
                             ),
-                          ],
+                            onChanged: (value) {
+                              context.read<SendOtpProvider>().updateButtonState(value);
+                            },
+                          ),
                         ),
                         35.height,
-                        Consumer<SendOtpProvider>(
+                         Consumer<SendOtpProvider>(
                           builder: (context, provider, child) {
                             return CustomButton(
                               height: 50,
                               width: double.infinity,
                               buttonText: "SEND OTP",
-                              onPress: isButtonEnabled
-                                  ? () async {
+                              onPress: provider.isButtonEnabled
+                                  ? () {
                                       if (formKey.currentState!.validate()) {
-                                        context.push(OtpVerificationScreen( mobileNumber: mobileController.text,));
+                                        context.push(OtpVerificationScreen(mobileNumber: mobileController.text,));
                                       }
                                     }
                                   : () {},
-                              backgroundColor: isButtonEnabled
+                              backgroundColor: provider.isButtonEnabled
                                   ? buttonBgColor
-                                  : greyColor, 
+                                  : greyColor,
                               foregroundColor: whiteColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(6),
                               ),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
                             );
                           },
                         ),
