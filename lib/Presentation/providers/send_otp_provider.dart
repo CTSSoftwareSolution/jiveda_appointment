@@ -1,9 +1,20 @@
 import 'package:flutter/cupertino.dart';
+import 'package:jiveda_appointment/utilities/color_data.dart';
 
 class SendOtpProvider extends ChangeNotifier{
+  String mobileNumber = "";
   bool isButtonEnabled = false;
-  void updateButtonState(String mobileNumber) {
+  void updateButtonState(String value) {
+    mobileNumber = value;
     isButtonEnabled = mobileNumber.length == 10;
     notifyListeners();
+  }
+
+  Color get sendButtonColor => isButtonEnabled ? buttonBgColor : greyColor;
+
+  void onSendOtp(VoidCallback pushOtpScreen) {
+    if (isButtonEnabled) {
+      pushOtpScreen();
+    }
   }
 }

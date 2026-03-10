@@ -30,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final Color scaffoldBgColor = Theme.of(context).scaffoldBackgroundColor;
     final screenWidth = MediaQuery.of(context).size.width;
-
+    final sendOtpProvider = context.read<SendOtpProvider>();
+    final buttonColor = context.watch<SendOtpProvider>().sendButtonColor;
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -64,7 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         10.height,
                         const CustomText(
-                          text: "We will send you one time OTP on\nthis mobile number",
+                          text:
+                              "We will send you one time OTP on\nthis mobile number",
                           fontSize: 14,
                           textColor: blackColor,
                         ),
@@ -89,35 +91,31 @@ class _LoginScreenState extends State<LoginScreen> {
                               horizontal: 12,
                             ),
                             onChanged: (value) {
-                              context.read<SendOtpProvider>().updateButtonState(value);
+                              context.read<SendOtpProvider>().updateButtonState(
+                                value,
+                              );
                             },
                           ),
                         ),
                         35.height,
-                         Consumer<SendOtpProvider>(
-                          builder: (context, provider, child) {
-                            return CustomButton(
-                              height: 50,
-                              width: double.infinity,
-                              buttonText: "SEND OTP",
-                              onPress: provider.isButtonEnabled
-                                  ? () {
-                                      if (formKey.currentState!.validate()) {
-                                        context.push(OtpVerificationScreen(mobileNumber: mobileController.text,));
-                                      }
-                                    }
-                                  : () {},
-                              backgroundColor: provider.isButtonEnabled
-                                  ? buttonBgColor
-                                  : greyColor,
-                              foregroundColor: whiteColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                            );
+                        CustomButton(
+                          buttonText: "SEND OTP",
+                          onPress: () {
+                            sendOtpProvider.onSendOtp(() {
+                              if (formKey.currentState!.validate()) {
+                                context.push(const OtpVerificationScreen());
+                              }
+                            });
                           },
+                          backgroundColor:buttonColor,
+                          foregroundColor: whiteColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          width: double.infinity,
+                          height: 50,
                         ),
                       ],
                     ),
