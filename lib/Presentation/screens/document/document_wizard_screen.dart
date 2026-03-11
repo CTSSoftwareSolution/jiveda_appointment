@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../../../api_service.dart';
 import '../../../models.dart';
-import '../../providers/appointment_provider.dart';
+import '../../providers/appointment_list_provider.dart';
 import 'build_navigation_widget.dart';
 
 class DocumentWizardScreen extends StatefulWidget {

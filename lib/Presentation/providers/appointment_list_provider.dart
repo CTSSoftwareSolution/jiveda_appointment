@@ -3,7 +3,7 @@ import 'package:jiveda_appointment/models/appointment_list_res_model.dart';
 import '../../api_service.dart';
 import '../../models.dart';
 
-class AppointmentProvider extends ChangeNotifier {
+class AppointmentListProvider extends ChangeNotifier {
   List<AppointmentDataModel> _appointments = [];
   bool _isLoading = false;
   String _searchQuery = '';

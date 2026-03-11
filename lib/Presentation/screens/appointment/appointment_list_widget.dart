@@ -4,7 +4,7 @@ import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
 import '../../../models.dart';
-import '../../providers/appointment_provider.dart';
+import '../../providers/appointment_list_provider.dart';
 import 'appointment_card_widget.dart';
 
 
@@ -30,7 +30,7 @@ Widget buildList(List<AppointmentDataModel> all, String? statusFilter, BuildCont
     );
   }
   return RefreshIndicator(
-    onRefresh: () => context.read<AppointmentProvider>().fetchAppointments(),
+    onRefresh: () => context.read<AppointmentListProvider>().fetchAppointments(),
     child: ListView.builder(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(top: 16,right: 16,left: 16,bottom: 80.0),

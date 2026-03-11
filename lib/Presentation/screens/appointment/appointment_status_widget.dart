@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/models/appointment_list_res_model.dart';
+import 'package:jiveda_appointment/Presentation/providers/appointment_count_provider.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
-import '../../../models.dart';
+import 'package:provider/provider.dart';
 
-Widget buildStatsRow(List<AppointmentDataModel> appointments) {
-  final total = appointments.length;
-  final scheduled =
-      appointments.where((a) => a.statusID == 'scheduled').length;
-  final completed =
-      appointments.where((a) => a.statusID == 'completed').length;
-  // final docsUploaded =
-  //     appointments.where((a) => a.isDocumentUploaded).length;
+
+Widget buildStatsRow(BuildContext context) {
+  final countProvider = Provider.of<AppointmentCountProvider>(context,listen: false);
+  final total = countProvider.count.fold(0, (sum, item) => sum + (item.totalCount?.toInt() ?? 0));
+  final scheduled = countProvider.getCount(2);
+  final completed = countProvider.getCount(1);
+   final docsUploaded = countProvider.getCount(5);
 
   return Container(
     color: whiteColor,
@@ -22,7 +21,7 @@ Widget buildStatsRow(List<AppointmentDataModel> appointments) {
         const SizedBox(width: 8),
         statChip('Scheduled', scheduled, orangeColor),
         const SizedBox(width: 8),
-        statChip('Docs Done', 5, greenColor),
+        statChip('Docs Done', docsUploaded, greenColor),
         const SizedBox(width: 8),
         statChip('Done', completed, blueColor),
       ],

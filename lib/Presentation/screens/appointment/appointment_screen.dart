@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/appointment_count_provider.dart';
 import 'package:jiveda_appointment/Presentation/screens/appointment/shimmer_widget.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
-import '../../providers/appointment_provider.dart';
+import '../../providers/appointment_list_provider.dart';
 import 'appointment_list_widget.dart';
 import 'appointment_status_widget.dart';
 
@@ -24,7 +25,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AppointmentProvider>().fetchAppointments();
+      context.read<AppointmentListProvider>().fetchAppointments();
+      context.read<AppointmentCountProvider>().fetchCounts();
     });
   }
 
@@ -39,7 +41,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    final aptProv = context.watch<AppointmentProvider>();
+    final aptProv = context.watch<AppointmentListProvider>();
 
     return Scaffold(
       body: NestedScrollView(
@@ -146,7 +148,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
               ),
             ),
             // Stats row
-            if (!aptProv.isLoading) buildStatsRow(aptProv.appointments),
+            if (!aptProv.isLoading) buildStatsRow(context),
             // Appointment List
             Expanded(
               child: aptProv.isLoading

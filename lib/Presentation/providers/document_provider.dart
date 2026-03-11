@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../api_service.dart';
 import '../../utilities/color_data.dart';
 import '../screens/document/step_model.dart';
-import 'appointment_provider.dart';
+import 'appointment_list_provider.dart';
 
 class DocumentProvider extends ChangeNotifier {
 
