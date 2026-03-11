@@ -38,6 +38,19 @@ class _LoginScreenState extends State<LoginScreen> {
           key: formKey,
           child: Column(
             children: [
+              10.height,
+              Padding(
+                padding: EdgeInsets.only(left: screenWidth * 0.04),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(Icons.close, size: 24, color: greyColor),
+                  ),
+                ),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -47,21 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        10.height,
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(Icons.close, size: 24),
-                          ),
-                        ),
                         17.height,
                         const CustomText(
                           text: "Log in or sign up to Jiveda Appointment",
                           fontWeight: FontWeight.w500,
-                          fontSize: 17,
+                          fontSize: 18,
                         ),
                         10.height,
                         const CustomText(
@@ -69,6 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               "We will send you one time OTP on\nthis mobile number",
                           fontSize: 14,
                           textColor: blackColor,
+                          fontWeight: FontWeight.w300,
                         ),
                         30.height,
                         SizedBox(
@@ -107,13 +111,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               }
                             });
                           },
-                          backgroundColor:buttonColor,
+                          backgroundColor: buttonColor,
                           foregroundColor: whiteColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6),
                           ),
                           fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w400,
                           width: double.infinity,
                           height: 50,
                         ),
@@ -127,14 +131,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: const TextStyle(fontSize: 12, color: textHintColor),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: blackColor,
+                      fontWeight: FontWeight.w300,
+                      height: 1.4,
+                    ),
                     children: [
                       const TextSpan(text: "By continuing, you agree to our\n"),
                       TextSpan(
                         text: "Terms & Conditions",
                         style: const TextStyle(
                           decoration: TextDecoration.underline,
-                          color: textHintColor,
+                          color: blackColor,
+                          fontWeight: FontWeight.w300,
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
@@ -143,7 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         text: "Privacy Policy",
                         style: const TextStyle(
                           decoration: TextDecoration.underline,
-                          color: textHintColor,
+                          color: blackColor,
+                          fontWeight: FontWeight.w300,
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
