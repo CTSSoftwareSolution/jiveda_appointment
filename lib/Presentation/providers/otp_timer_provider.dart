@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+
 class OtpTimerProvider extends ChangeNotifier {
   int seconds = 30;
   Timer? _timer;
