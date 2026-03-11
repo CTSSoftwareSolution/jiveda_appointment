@@ -18,7 +18,7 @@ class OtpFieldRow extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           color: focusNodes[index].hasFocus
-              ? buttonBgColor
+              ? appColor
               : Colors.grey.shade300,
         ),
         borderRadius: BorderRadius.circular(6),

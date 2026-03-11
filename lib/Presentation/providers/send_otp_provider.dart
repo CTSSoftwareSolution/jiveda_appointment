@@ -10,7 +10,7 @@ class SendOtpProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Color get sendButtonColor => isButtonEnabled ? buttonBgColor : greyColor;
+  Color get sendButtonColor => isButtonEnabled ? appColor : buttonBgGreyColor;
 
   void onSendOtp(VoidCallback pushOtpScreen) {
     if (isButtonEnabled) {
