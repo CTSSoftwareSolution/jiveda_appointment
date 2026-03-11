@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/otp_timer_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/auth_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/document_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
@@ -21,6 +22,7 @@ class MultipleProvider extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => SplashScreenProvider()),
         ChangeNotifierProvider(create: (_) => SendOtpProvider()),
+        ChangeNotifierProvider(create: (_) => OtpTimerProvider()),  
         ChangeNotifierProvider(create: (_) => AppointmentListProvider()),
         ChangeNotifierProvider(create: (_) => AppointmentCountProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
