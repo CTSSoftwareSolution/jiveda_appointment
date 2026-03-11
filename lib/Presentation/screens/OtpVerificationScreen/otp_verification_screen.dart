@@ -47,76 +47,90 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final mobileNumber = context.watch<SendOtpProvider>().mobileNumber;
     final otpSeconds = context.watch<OtpTimerProvider>().seconds;
+
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              10.height,
-              GestureDetector(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            10.height,
+            Padding(
+              padding: EdgeInsets.only(left: screenWidth * 0.04),
+              child: GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: const Icon(Icons.arrow_back, size: 24),
+                child: const Icon(Icons.arrow_back, size: 24, color: greyColor),
               ),
-              15.height,
-              const CustomText(
-                text: "OTP Verification",
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              ),
-              10.height,
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: blackColor,
-                    height: 1.4,
-                  ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextSpan(
-                      text:
-                          "We have sent a verification code to\n+91 - $mobileNumber  ",
+                    15.height,
+                    const CustomText(
+                      text: "OTP Verification",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
                     ),
-                    TextSpan(
-                      text: "(Edit?)",
-                      style: const TextStyle(color: textColor),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.pop(context);
-                        },
+                    10.height,
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: blackColor,
+                          height: 1.4,
+                          fontWeight: FontWeight.w300,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: "We have sent a verification code to\n+91 - $mobileNumber  ",
+                          ),
+                          TextSpan(
+                            text: "(Edit?)",
+                            style: const TextStyle(color: greenColor),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pop(context);
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                    35.height,
+                    OtpFieldRow(
+                      controllers: controllers,
+                      focusNodes: focusNodes,
+                    ),
+                    20.height,
+                    Center(
+                      child: CustomText(
+                        text: otpSeconds == 0
+                            ? "Resend OTP"
+                            : "Resend in 00:${otpSeconds.toString().padLeft(2, '0')}",
+                        fontSize: 14,
+                        textColor: blackColor,
+                      ),
+                    ),
+                    40.height,
+                    CustomButton(
+                      height: 50,
+                      width: double.infinity,
+                      buttonText: "VERIFY",
+                      onPress: () {},
+                      backgroundColor: appColor,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
                     ),
                   ],
                 ),
               ),
-              35.height,
-              OtpFieldRow(controllers: controllers, focusNodes: focusNodes),
-              20.height,
-               Center(
-              child: CustomText(
-                text: otpSeconds == 0
-                    ? "Resend OTP"
-                    : "Resend in 00:${otpSeconds.toString().padLeft(2, '0')}",
-                fontSize: 14,
-                textColor: blackColor,
-              ),
             ),
-              40.height,
-              CustomButton(
-                height: 50,
-                width: double.infinity,
-                buttonText: "VERIFY",
-                onPress: () {},
-                backgroundColor: buttonBgColor,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
