@@ -17,23 +17,28 @@ class AppointmentScreen extends StatefulWidget {
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> with TickerProviderStateMixin {
-  late TabController _tabController;
-  final _searchCtrl = TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    final listProvider = Provider.of<AppointmentListProvider>(context,listen: false);
+    listProvider.tabController = TabController(length: 4, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AppointmentListProvider>().fetchAppointments();
       context.read<AppointmentCountProvider>().fetchCounts();
+
+      listProvider.listenTabChanges(context);
     });
   }
 
+
+
   @override
   void dispose() {
-    _tabController.dispose();
-    _searchCtrl.dispose();
+    final listProvider = Provider.of<AppointmentListProvider>(context,listen: false);
+    listProvider.tabController.dispose();
+    listProvider.searchCtrl.dispose();
     super.dispose();
   }
 
@@ -47,6 +52,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             toolbarHeight: 60,
             floating: false,
             pinned: true,
@@ -84,7 +90,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
                 ),
                 //color: appColor,
                 child: TabBar(
-                  controller: _tabController,
+                  controller: aptProv.tabController,
                   isScrollable: true,
                   tabAlignment: TabAlignment.start,
                   indicatorColor: greenColor,
@@ -112,17 +118,17 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
               padding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: TextField(
-                controller: _searchCtrl,
+                controller: aptProv.searchCtrl,
                 onChanged: aptProv.setSearch,
                 decoration: InputDecoration(
                   hintText: 'Search by name, appointment no...',
                   hintStyle: TextStyle(fontSize: 14.0,fontWeight: FontWeight.w400,color:textHintColor),
                   prefixIcon: const Icon(Icons.search, color: textSecondaryColor),
-                  suffixIcon: _searchCtrl.text.isNotEmpty
+                  suffixIcon: aptProv.searchCtrl.text.isNotEmpty
                       ? IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: () {
-                      _searchCtrl.clear();
+                      aptProv.searchCtrl.clear();
                       aptProv.setSearch('');
                     },
                   )
@@ -154,12 +160,12 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
               child: aptProv.isLoading
                   ? buildShimmer()
                   : TabBarView(
-                controller: _tabController,
+                controller: aptProv.tabController,
                 children: [
-                  buildList(aptProv.appointments, null,context),
-                  buildList(aptProv.appointments, 'scheduled',context),
-                  buildList(aptProv.appointments, 'completed',context),
-                  buildList(aptProv.appointments, 'cancelled',context),
+                  buildList(null,context),
+                  buildList('2',context),
+                  buildList('1',context),
+                  buildList('cancelled',context),
                 ],
               ),
             ),

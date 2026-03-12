@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/models/appointment_list_res_model.dart';
+
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
-import '../../../models.dart';
+import '../../../Data/models/appointment_list_res_model.dart';
 import '../../providers/appointment_list_provider.dart';
 import 'appointment_card_widget.dart';
 
 
 List<AppointmentDataModel> _filterByStatus(
-    List<AppointmentDataModel> all, String? status) {
-  if (status == null) return all;
+    BuildContext context, String? status) {
+
+  final provider = context.read<AppointmentListProvider>();
+  final all = provider.filteredAppointments;
+
+  if (status == null || status.isEmpty) return all;
+
   return all.where((a) => a.statusID == status).toList();
 }
 
-Widget buildList(List<AppointmentDataModel> all, String? statusFilter, BuildContext context) {
-  final filtered = _filterByStatus(all, statusFilter);
+
+Widget buildList(String? statusFilter, BuildContext context) {
+  final provider = context.watch<AppointmentListProvider>();
+
+  final all = provider.filteredAppointments;
+  final filtered = _filterByStatus(context, statusFilter);
+
+
   if (filtered.isEmpty) {
     return Center(
       child: Column(
