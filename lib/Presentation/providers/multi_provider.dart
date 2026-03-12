@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/Data/repositories_impl/appointment_count_rep_impl.dart';
-import 'package:jiveda_appointment/Data/repositories_impl/appointment_list_rep_impl.dart';
-import 'package:jiveda_appointment/Domain/usecases/appointment_count_usecases.dart';
-import 'package:jiveda_appointment/Domain/usecases/appointment_list_usecases.dart';
-import 'package:jiveda_appointment/Presentation/providers/document_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/otp_timer_provider.dart';
+import 'package:jiveda_appointment/Presentation/providers/auth_provider.dart';
+import 'package:jiveda_appointment/Presentation/providers/document_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/splash_screen_provider.dart';
 import 'package:provider/provider.dart';
@@ -24,11 +21,14 @@ class MultipleProvider extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SplashScreenProvider()),
-        ChangeNotifierProvider(create: (_) => SendOtpProvider()),
         ChangeNotifierProvider(create: (_) => AppointmentListProvider(appointmentListUseCases: AppointmentListUseCases(appointmentListRepository: AppointmentListRepositoryImpl()))),
         ChangeNotifierProvider(create: (_) => AppointmentCountProvider(appointmentCountUseCases: AppointmentCountUseCases(appointmentCountRepository: AppointmentCountRepImpl()))),
         ChangeNotifierProvider(create: (_) => DocumentProvider()),
         ChangeNotifierProvider(create: (_) => OtpTimerProvider())
+        ChangeNotifierProvider(create: (_) => SendOtpProvider(sendOtpUseCase: SendOtpUseCase(sendOtpRepository: SendOtpRepositoryImpl()))),
+        ChangeNotifierProvider(create: (_) => VerifyOtpProvider(verifyOtpUseCase: VerifyOtpUseCase(verifyOtpRepository: VerifyOtpRepositoryImpl()))),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => DocumentProvider())
       ],
       child: const MyApp(),
     );

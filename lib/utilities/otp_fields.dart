@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 
 class OtpFieldRow extends StatelessWidget {
+
   final List<TextEditingController> controllers;
   final List<FocusNode> focusNodes;
 
@@ -49,7 +50,8 @@ class OtpFieldRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(6, (index) => otpBox(context, index)),
+      children: List.generate(6, (index) => otpBox(context, index),
+      ),
     );
   }
 }
