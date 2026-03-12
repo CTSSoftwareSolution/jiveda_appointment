@@ -1,15 +1,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jiveda_appointment/models/appointment_list_res_model.dart';
+import 'package:jiveda_appointment/Presentation/providers/appointment_list_provider.dart';
+
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/utilities/extension.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
+import 'package:provider/provider.dart';
 
+import '../../../Data/model/response/appointment_list_res_model.dart';
 import '../../../models.dart';
 import '../document/document_wizard_screen.dart';
 
 Widget buildAppointmentCard(AppointmentDataModel apt, BuildContext context) {
+
+  final provider = Provider.of<AppointmentListProvider>(context,listen: false);
   final statusColor = apt.statusID == '2'
       ? orangeColor
       : apt.statusID == '1'
@@ -25,11 +30,12 @@ Widget buildAppointmentCard(AppointmentDataModel apt, BuildContext context) {
 
   return GestureDetector(
     onTap: () async {
-      // await Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //       builder: (_) => DocumentWizardScreen(appointment: apt)),
-      // );
+      provider.setSelectedAppointment(apt);
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => DocumentWizardScreen()),
+      );
       },
     child: Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -38,9 +44,9 @@ Widget buildAppointmentCard(AppointmentDataModel apt, BuildContext context) {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color:
-          // apt.isDocumentUploaded
-          //     ? greenColor.withValues(alpha: 0.4)
-          //     :
+          apt.isUploadDoc == "Yes"
+              ? greenColor.withValues(alpha: 0.4)
+              :
           borderColor,
         ),
         boxShadow: [
@@ -99,17 +105,17 @@ Widget buildAppointmentCard(AppointmentDataModel apt, BuildContext context) {
                       child: CustomText(text: apt.statusName!.toUpperCase(),fontSize: 10, textColor: statusColor,fontWeight: FontWeight.w700,letterSpacing: 0.5,)
 
                     ),
-                    // if (apt.isDocumentUploaded) ...[
-                    //   const SizedBox(height: 4),
-                    //   const Row(
-                    //     children: [
-                    //       Icon(Icons.check_circle,
-                    //           color: greenColor, size: 14),
-                    //       SizedBox(width: 3),
-                    //       CustomText(text: 'Docs uploaded', textColor: greenColor,fontSize: 10,fontWeight: FontWeight.w600,)
-                    //     ],
-                    //   ),
-                    // ],
+                    if (apt.isUploadDoc == "Yes") ...[
+                      const SizedBox(height: 4),
+                      const Row(
+                        children: [
+                          Icon(Icons.check_circle,
+                              color: greenColor, size: 14),
+                          SizedBox(width: 3),
+                          CustomText(text: 'Docs uploaded', textColor: greenColor,fontSize: 10,fontWeight: FontWeight.w600,)
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ],

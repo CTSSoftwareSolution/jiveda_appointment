@@ -16,6 +16,7 @@ const buttonBgColor = Color(0xff1e88E5);
 const greyColor = Color(0xff757575);
 const buttonBgGreyColor = Color(0xffe0e0e0);
 const textColor = Color(0xFF2BB1F5);
+
 const lightWhiteColor = Color(0x8affffff);
 const textSecondaryColor = Color(0xFF6B7280);
 const borderColor = Color(0xFFE5E7EB);

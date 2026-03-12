@@ -1,26 +1,18 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:jiveda_appointment/Presentation/providers/document_provider.dart';
 import 'package:jiveda_appointment/Presentation/screens/document/progress_header_widget.dart';
 import 'package:jiveda_appointment/Presentation/screens/document/step_content_widget.dart';
 import 'package:jiveda_appointment/Presentation/screens/document/step_indicator_widget.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
-
 import 'package:provider/provider.dart';
-
-import '../../../api_service.dart';
-import '../../../models.dart';
 import '../../providers/appointment_list_provider.dart';
 import 'build_navigation_widget.dart';
 
 class DocumentWizardScreen extends StatefulWidget {
-  //final Appointment appointment;
 
-  const DocumentWizardScreen({super.key,
-    //required this.appointment
-  });
+
+  const DocumentWizardScreen({super.key});
 
   @override
   State<DocumentWizardScreen> createState() => _DocumentWizardScreenState();
@@ -53,13 +45,14 @@ class _DocumentWizardScreenState extends State<DocumentWizardScreen>
   @override
   Widget build(BuildContext context) {
     final docProvider = context.watch<DocumentProvider>();
+    final appointment = context.watch<AppointmentListProvider>().selectedAppointment;
     return Scaffold(
       backgroundColor: surfaceColor,
       appBar: AppBar(
         titleSpacing: 0.0,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: CustomText(text: "widget.appointment.clientName", textColor: whiteColor),
+        title: CustomText(text: appointment!.patientName.toString(), textColor: whiteColor),
         leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back),color: whiteColor,),
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -106,7 +99,7 @@ class _DocumentWizardScreenState extends State<DocumentWizardScreen>
             ),
           ),
           // Navigation
-          buildNavigation(context, "widget.appointment.id"),
+          buildNavigation(context, appointment.appointmentID.toString()),
         ],
       ),
     );
