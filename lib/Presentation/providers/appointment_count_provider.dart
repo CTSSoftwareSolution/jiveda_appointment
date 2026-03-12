@@ -3,7 +3,7 @@ import 'package:jiveda_appointment/Domain/entities/appointment_count_entity.dart
 import 'package:jiveda_appointment/Domain/usecases/appointment_count_usecases.dart';
 
 
-import '../../Data/models/appointment_count_res_model.dart';
+import '../../Data/model/response/appointment_count_res_model.dart';
 import '../../api_service.dart';
 
 class AppointmentCountProvider extends ChangeNotifier{

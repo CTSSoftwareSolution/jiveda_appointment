@@ -1,4 +1,4 @@
-import '../../Data/models/appointment_count_res_model.dart';
+import '../../Data/model/response/appointment_count_res_model.dart';
 
 class AppointmentCountEntity {
   num? success;

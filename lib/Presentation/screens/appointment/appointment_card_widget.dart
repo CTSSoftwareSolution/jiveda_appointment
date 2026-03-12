@@ -8,7 +8,7 @@ import 'package:jiveda_appointment/utilities/extension.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
 
-import '../../../Data/models/appointment_list_res_model.dart';
+import '../../../Data/model/response/appointment_list_res_model.dart';
 import '../../../models.dart';
 import '../document/document_wizard_screen.dart';
 

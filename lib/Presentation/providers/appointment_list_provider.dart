@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/Domain/entities/appointment_list_entity.dart';
 import 'package:provider/provider.dart';
 
-import '../../Data/models/appointment_list_res_model.dart';
+import '../../Data/model/response/appointment_list_res_model.dart';
 import '../../Domain/usecases/appointment_list_usecases.dart';
 import '../../api_service.dart';
 import '../../models.dart';

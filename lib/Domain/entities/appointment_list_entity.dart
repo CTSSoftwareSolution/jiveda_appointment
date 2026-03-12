@@ -1,5 +1,5 @@
 
-import '../../Data/models/appointment_list_res_model.dart';
+import '../../Data/model/response/appointment_list_res_model.dart';
 
 
 class AppointmentListEntity {

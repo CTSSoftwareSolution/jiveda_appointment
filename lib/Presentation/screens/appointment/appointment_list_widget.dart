@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
-import '../../../Data/models/appointment_list_res_model.dart';
+import '../../../Data/model/response/appointment_list_res_model.dart';
 import '../../providers/appointment_list_provider.dart';
 import 'appointment_card_widget.dart';
 

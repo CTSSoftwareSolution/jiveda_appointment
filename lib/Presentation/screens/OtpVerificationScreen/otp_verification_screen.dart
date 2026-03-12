@@ -120,7 +120,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       width: double.infinity,
                       buttonText: "VERIFY",
                       onPress: () {
-                        verifyOtpProvider.onVerifyOtp(mobile: mobileNumber);
+                        verifyOtpProvider.onVerifyOtp(mobile: mobileNumber, context: context);
                       },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,

@@ -97,12 +97,12 @@ class DocumentProvider extends ChangeNotifier {
   Future<void> save(BuildContext context, String appointmentId) async {
     final docProvider = Provider.of<DocumentProvider>(context,listen: false);
      docProvider.isSaving = true;
-    await ApiService.uploadDocuments(
-      appointmentId: appointmentId,
-      clientPhotoPath: docProvider.clientPhoto?.path,
-      idCardPath: docProvider.idCardPhoto?.path,
-      aadharPath: docProvider.aadharPhoto?.path,
-    );
+    // await ApiService.uploadDocuments(
+    //   appointmentId: appointmentId,
+    //   clientPhotoPath: docProvider.clientPhoto?.path,
+    //   idCardPath: docProvider.idCardPhoto?.path,
+    //   aadharPath: docProvider.aadharPhoto?.path,
+    // );
     // context.read<AppointmentProvider>().updateAppointmentDocs(
     //   appointmentId,
     //   clientPhoto: docProvider.clientPhoto?.path,

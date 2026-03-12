@@ -1,4 +1,6 @@
+import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
 import '../../Data/model/request/verify_otp_request_model.dart';
 import '../../Domain/entities/verify_otp_entity.dart';
 import '../../Domain/usecases/verify_otp_usecase.dart';
@@ -43,7 +45,7 @@ class VerifyOtpProvider extends ChangeNotifier {
     }
   }
   void onVerifyOtp({
-    required String mobile,
+    required String mobile, required BuildContext context
   }) async {
 
     final otp = getOtp();
@@ -52,6 +54,7 @@ class VerifyOtpProvider extends ChangeNotifier {
     if (response != null) {
       debugPrint("verify response success ${response.success}");
       debugPrint("verify response message ${response.message}");
+      context.push(AppointmentScreen());
     }
   }
   
