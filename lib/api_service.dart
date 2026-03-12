@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:jiveda_appointment/models/appointment_count_res_model.dart';
-import 'package:jiveda_appointment/models/appointment_list_res_model.dart';
 
+
+import 'Data/models/appointment_count_res_model.dart';
+import 'Data/models/appointment_list_res_model.dart';
 import 'models.dart';
 
 
@@ -15,101 +16,101 @@ class ApiService {
     _authToken = token;
   }
 
-  static Map<String, String> get _headers => {
+  static Map<String, String> get headers => {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${_authToken ?? ''}',
       };
 
   /// LOGIN
-  static Future<Map<String, dynamic>> login(
-      String email, String password) async {
-    // For demo - remove this block and uncomment real call
-    await Future.delayed(const Duration(seconds: 1));
-    if (email == 'admin@company.com' && password == 'admin123') {
-      return {
-        'success': true,
-        'token': 'mock_token_12345',
-        'user': {'name': 'Admin User', 'email': email}
-      };
-    }
-    return {'success': false, 'message': 'Invalid credentials'};
-
-    /* Real API call:
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/auth/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'password': password}),
-      );
-      return jsonDecode(response.body);
-    } catch (e) {
-      return {'success': false, 'message': e.toString()};
-    }
-    */
-  }
+  // static Future<Map<String, dynamic>> login(
+  //     String email, String password) async {
+  //   // For demo - remove this block and uncomment real call
+  //   await Future.delayed(const Duration(seconds: 1));
+  //   if (email == 'admin@company.com' && password == 'admin123') {
+  //     return {
+  //       'success': true,
+  //       'token': 'mock_token_12345',
+  //       'user': {'name': 'Admin User', 'email': email}
+  //     };
+  //   }
+  //   return {'success': false, 'message': 'Invalid credentials'};
+  //
+  //   /* Real API call:
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('$baseUrl/auth/login'),
+  //       headers: {'Content-Type': 'application/json'},
+  //       body: jsonEncode({'email': email, 'password': password}),
+  //     );
+  //     return jsonDecode(response.body);
+  //   } catch (e) {
+  //     return {'success': false, 'message': e.toString()};
+  //   }
+  //   */
+  // }
 
   /// FETCH APPOINTMENTS
-  static Future<List<AppointmentDataModel>> fetchAppointments() async {
-
-    // Real API call:
-    try{
-      final uri = Uri.parse('$baseUrl/Account/GetUserAppointments').replace(
-        queryParameters: {
-          'TokenID': 'ccc51949-9524-45b9-816a-f26900b8292e',
-          'StartLimit': '0',
-          'EndLimit': '10',
-          'LikeSearch': '',
-          'Sort': 'AppointmentDate',
-          'SortValue': 'DESC',
-          'StatusID': '2',
-          'PatientID': '45775',
-        }
-      );
-      final response = await http.get(uri,
-      headers: _headers);
-      if(response.statusCode == 200){
-        final json = jsonDecode(response.body);
-        final result = AppointmentListResModel.fromJson(json);
-
-        return result.data ?? [];
-      }else{
-        return [];
-      }
-    }catch (e){
-      return [];
-    }
-
-  }
+  // static Future<List<AppointmentDataModel>> fetchAppointments() async {
+  //
+  //   // Real API call:
+  //   try{
+  //     final uri = Uri.parse('$baseUrl/Account/GetUserAppointments').replace(
+  //       queryParameters: {
+  //         'TokenID': 'ccc51949-9524-45b9-816a-f26900b8292e',
+  //         'StartLimit': '0',
+  //         'EndLimit': '10',
+  //         'LikeSearch': '',
+  //         'Sort': 'AppointmentDate',
+  //         'SortValue': 'DESC',
+  //         'StatusID': '2',
+  //         'PatientID': '45775',
+  //       }
+  //     );
+  //     final response = await http.get(uri,
+  //     headers: _headers);
+  //     if(response.statusCode == 200){
+  //       final json = jsonDecode(response.body);
+  //       final result = AppointmentListResModel.fromJson(json);
+  //
+  //       return result.data ?? [];
+  //     }else{
+  //       return [];
+  //     }
+  //   }catch (e){
+  //     return [];
+  //   }
+  //
+  // }
 
 
   /// FETCH COUNTS
-  static Future<List<CountDataModel>> fetchCounts() async {
-
-    // Real API call:
-    try{
-      final uri = Uri.parse('$baseUrl/Account/GetUserAppointmentscount').replace(
-          queryParameters: {
-            'TokenID': 'ccc51949-9524-45b9-816a-f26900b8292e',
-            'LikeSearch': '',
-            'PatientID': '45775',
-          }
-      );
-      final response = await http.get(
-          uri,
-          headers: _headers);
-      if(response.statusCode == 200){
-        final json = jsonDecode(response.body);
-        final result = AppointmentCountResModel.fromJson(json);
-
-        return result.data ?? [];
-      }else{
-        return [];
-      }
-    }catch (e){
-      return [];
-    }
-
-  }
+  // static Future<List<CountDataModel>> fetchCounts() async {
+  //
+  //   // Real API call:
+  //   try{
+  //     final uri = Uri.parse('$baseUrl/Account/GetUserAppointmentscount').replace(
+  //         queryParameters: {
+  //           'TokenID': 'ccc51949-9524-45b9-816a-f26900b8292e',
+  //           'LikeSearch': '',
+  //           'PatientID': '45775',
+  //         }
+  //     );
+  //     final response = await http.get(
+  //         uri,
+  //         headers: headers);
+  //     if(response.statusCode == 200){
+  //       final json = jsonDecode(response.body);
+  //       final result = AppointmentCountResModel.fromJson(json);
+  //
+  //       return result.data ?? [];
+  //     }else{
+  //       return [];
+  //     }
+  //   }catch (e){
+  //     return [];
+  //   }
+  //
+  // }
 
   /// UPLOAD DOCUMENTS (multipart)
   static Future<bool> uploadDocuments({
