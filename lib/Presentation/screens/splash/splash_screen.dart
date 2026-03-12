@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/utilities/color_data.dart';
 
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

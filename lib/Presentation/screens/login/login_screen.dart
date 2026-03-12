@@ -63,16 +63,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         17.height,
                         const CustomText(
                           text: "Log in or sign up to Jiveda Appointment",
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           fontSize: 18,
                         ),
                         10.height,
                         const CustomText(
                           text:
                               "We will send you one time OTP on\nthis mobile number",
-                          fontSize: 14,
+                          fontSize: 15,
                           textColor: blackColor,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                         ),
                         30.height,
                         SizedBox(
@@ -132,9 +132,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       color: blackColor,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w400,
                       height: 1.4,
                     ),
                     children: [
@@ -144,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: const TextStyle(
                           decoration: TextDecoration.underline,
                           color: blackColor,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: const TextStyle(
                           decoration: TextDecoration.underline,
                           color: blackColor,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
