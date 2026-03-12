@@ -26,6 +26,7 @@ class AppointmentCountProvider extends ChangeNotifier{
     e.statusID == statusId, orElse: () => CountDataModel(statusID: statusId, totalCount: 0)).totalCount?.toInt() ?? 0;
   }
 
+
   Future<void> fetchCounts() async {
     _isLoading = true;
     notifyListeners();
