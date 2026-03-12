@@ -1,6 +1,8 @@
+import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
+import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
 import 'package:jiveda_appointment/utilities/otp_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/otp_timer_provider.dart';
@@ -70,17 +72,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     15.height,
                     const CustomText(
                       text: "OTP Verification",
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       fontSize: 18,
                     ),
                     10.height,
                     RichText(
                       text: TextSpan(
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 15,
                           color: blackColor,
                           height: 1.4,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                         ),
                         children: [
                           TextSpan(
@@ -117,7 +119,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       height: 50,
                       width: double.infinity,
                       buttonText: "VERIFY",
-                      onPress: () {},
+                      onPress: () {
+                        context.push(AppointmentScreen());
+                      },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
