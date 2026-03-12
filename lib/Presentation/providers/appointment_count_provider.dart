@@ -2,9 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:jiveda_appointment/Domain/entities/appointment_count_entity.dart';
 import 'package:jiveda_appointment/Domain/usecases/appointment_count_usecases.dart';
 
-
 import '../../Data/model/response/appointment_count_res_model.dart';
-import '../../api_service.dart';
+
 
 class AppointmentCountProvider extends ChangeNotifier{
 
@@ -24,7 +23,7 @@ class AppointmentCountProvider extends ChangeNotifier{
 
   int getCount(int statusId){
     return count.firstWhere((e) =>
-    e.statusID == statusId).totalCount?.toInt() ?? 0;
+    e.statusID == statusId, orElse: () => CountDataModel(statusID: statusId, totalCount: 0)).totalCount?.toInt() ?? 0;
   }
 
   Future<void> fetchCounts() async {
