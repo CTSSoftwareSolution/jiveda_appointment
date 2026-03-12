@@ -12,7 +12,7 @@ class ApiService {
   static const String baseUrl = 'https://jiveda.in/api/api/';
   static String? _authToken;
 
-  static void setToken(String token) {
+    static void setToken(String token) {
     _authToken = token;
   }
 
