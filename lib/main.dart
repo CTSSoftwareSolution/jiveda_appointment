@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
 import 'package:jiveda_appointment/Presentation/screens/login/login_screen.dart';
-import 'package:jiveda_appointment/Presentation/screens/splash/splash_screen.dart';
+import 'package:jiveda_appointment/utilities/preferences.dart';
 
 import 'Presentation/providers/multi_provider.dart';
 
 
 
 
-void main() {
-  runApp(MultipleProvider());
+void main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+  await Preferences.setPreferences();
+  runApp(const MultipleProvider());
 }
 
 class MyApp extends StatelessWidget {
@@ -24,8 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SplashScreen()
+      home: LoginScreen()
     );
   }
 }
-

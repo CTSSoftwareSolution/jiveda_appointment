@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/utilities/preferences.dart';
 import '../../Data/model/request/send_otp_request_model.dart';
 import '../../Domain/entities/send_otp_entity.dart';
 import '../../Domain/usecases/send_otp_usecase.dart';
@@ -30,8 +31,7 @@ class SendOtpProvider extends ChangeNotifier {
     try {
       isLoading = true;
       notifyListeners();
-      SendOtpRequestModel requestModel = SendOtpRequestModel(mobile: int.parse(mobileController.text));
-
+      SendOtpRequestModel requestModel = SendOtpRequestModel(mobile: int.parse(mobileNumber));
       sendOtpEntity = await sendOtpUseCase.execute(requestModel);
       debugPrint("OTP response success ${sendOtpEntity?.success}");
       debugPrint("OTP response message ${sendOtpEntity?.message}");
@@ -49,6 +49,7 @@ class SendOtpProvider extends ChangeNotifier {
     if (!isButtonEnabled) return;
     final response = await sendOtpApi();
     if (response != null && response.success == 1) {
+      await Preferences.setMobileNumber(mobileNumber);
       debugPrint("OTP sent successfully");
       pushOtpScreen();
     } else {

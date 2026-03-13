@@ -70,6 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           text:
                               "We will send you one time OTP on\nthis mobile number",
                           fontSize: 15,
+
                           textColor: blackColor,
                           fontWeight: FontWeight.w400,
                         ),
@@ -94,10 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               horizontal: 12,
                             ),
                             onChanged: (value) {
-                              context.read<SendOtpProvider>().updateButtonState(
-                                value,
-                              );
-                            },
+                              context.read<SendOtpProvider>().updateButtonState(value);
+                              },
                           ),
                         ),
                         35.height,
