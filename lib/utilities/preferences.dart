@@ -5,6 +5,16 @@ class Preferences {
   static SharedPreferences? instance;
 
   static String mobileNumber = "mobileNumber";
+  static String userId = "userId";
+  static String userName = "userName";
+  static String patientId = "patientId";
+  static String email = "email";
+  static String mobile = "mobile";
+  static String firstName = "firstName";
+  static String lastName = "lastName";
+  static String patientName = "patientName";
+  static String tokenId = "tokenId";
+  static String roleId = "roleId";
 
   static Future<void> setPreferences() async {
     instance = await SharedPreferences.getInstance();
@@ -19,5 +29,26 @@ class Preferences {
   }
 
   static Future<bool> setMobileNumber(String value) => setString(mobileNumber, value);
+  static Future<bool> setUserId(String value) => setString(userId, value);
+  static Future<bool> setUserName(String value) => setString(userName, value);
+  static Future<bool> setPatientId(String value) => setString(patientId, value);
+  static Future<bool> setEmail(String value) => setString(email, value);
+  static Future<bool> setMobile(String value) => setString(mobile, value);
+  static Future<bool> setFirstName(String value) => setString(firstName, value);
+  static Future<bool> setLastName(String value) => setString(lastName, value);
+  static Future<bool> setPatientName(String value) => setString(patientName, value);
+  static Future<bool> setTokenId(String value) => setString(tokenId, value);
+  static Future<bool> setRoleId(String value) => setString(roleId, value);
+
   static dynamic getMobileNumber() => getString(mobileNumber);
+  static String getUserId() => getString(userId);
+  static String getUserName() => getString(userName);
+  static String getPatientId() => getString(patientId);
+  static String getEmail() => getString(email);
+  static String getMobile() => getString(mobile);
+  static String getFirstName() => getString(firstName);
+  static String getLastName() => getString(lastName);
+  static String getPatientName() => getString(patientName);
+  static String getTokenId() => getString(tokenId);
+  static String getRoleId() => getString(roleId);
 }

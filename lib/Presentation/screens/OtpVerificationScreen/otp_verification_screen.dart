@@ -124,7 +124,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       buttonText: "VERIFY",
                       onPress: () {
                         verifyOtpProvider.onVerifyOtp(
-                          mobile: mobileNumber,
+                          sendOtpProvider: sendOtpProvider,
                           onSuccess: () {
                             context.push(const AppointmentScreen());
                           },
