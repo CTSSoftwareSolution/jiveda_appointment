@@ -20,6 +20,7 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +40,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final verifyOtpProvider = context.read<VerifyOtpProvider>();
     final sendOtpProvider = context.read<SendOtpProvider>();
     final otpTimer = context.read<OtpTimerProvider>();
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -65,22 +65,21 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     15.height,
                     const CustomText(
                       text: "OTP Verification",
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       fontSize: 18,
                     ),
                     10.height,
                     RichText(
                       text: TextSpan(
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 15,
                           color: blackColor,
                           height: 1.4,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                         ),
                         children: [
                           TextSpan(
-                            text:
-                                "We have sent a verification code to\n+91 - $mobileNumber  ",
+                            text: "We have sent a verification code to\n+91 - $mobileNumber  ",
                           ),
                           TextSpan(
                             text: "(Edit?)",
@@ -88,7 +87,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.pop(context);
-                                verifyOtpProvider.clearOtp();
                               },
                           ),
                         ],
@@ -117,7 +115,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           fontSize: 14,
                           textColor: blackColor,
                         ),
-                      ),
+                    ),
                     ),
                     40.height,
                     CustomButton(

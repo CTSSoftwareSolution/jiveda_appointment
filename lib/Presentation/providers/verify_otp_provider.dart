@@ -1,5 +1,7 @@
+import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/widgets/custom_loader.dart';
+import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
 import '../../Data/model/request/verify_otp_request_model.dart';
 import '../../Domain/entities/verify_otp_entity.dart';
 import '../../Domain/usecases/verify_otp_usecase.dart';
@@ -43,6 +45,8 @@ class VerifyOtpProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
   void onVerifyOtp({
   required String mobile,
   required VoidCallback onSuccess,
@@ -72,4 +76,15 @@ class VerifyOtpProvider extends ChangeNotifier {
       controller.clear();
     }
   }
+
+  @override
+void dispose() {
+  for (var controller in otpControllers) {
+    controller.dispose();
+  }
+  for (var node in focusNodes) {
+    node.dispose();
+  }
+  super.dispose();
+}
 }

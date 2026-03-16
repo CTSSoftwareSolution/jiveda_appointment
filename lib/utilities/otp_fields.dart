@@ -63,7 +63,6 @@ class _OtpFieldRowState extends State<OtpFieldRow> {
           if (value.isEmpty) {
             if (index > 0) {
               FocusScope.of(context).requestFocus(widget.focusNodes[index - 1]);
-
               widget
                   .controllers[index - 1]
                   .selection = TextSelection.fromPosition(

@@ -1,7 +1,6 @@
 import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:jiveda_appointment/Presentation/screens/OtpVerificationScreen/otp_verification_screen.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/utilities/extension.dart';
@@ -45,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
                     onTap: () {
-                      SystemNavigator.pop();
+                      Navigator.pop(context);
                     },
                     child: const Icon(Icons.close, size: 24, color: greyColor),
                   ),
@@ -63,16 +62,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         17.height,
                         const CustomText(
                           text: "Log in or sign up to Jiveda Appointment",
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                           fontSize: 18,
                         ),
                         10.height,
                         const CustomText(
-                          text:
-                              "We will send you one time OTP on\nthis mobile number",
-                          fontSize: 14,
+                          text: "We will send you one time OTP on\nthis mobile number",
+                          fontSize: 15,
                           textColor: blackColor,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                         ),
                         30.height,
                         SizedBox(
@@ -133,9 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       color: blackColor,
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w400,
                       height: 1.4,
                     ),
                     children: [
@@ -145,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: const TextStyle(
                           decoration: TextDecoration.underline,
                           color: blackColor,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
@@ -155,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: const TextStyle(
                           decoration: TextDecoration.underline,
                           color: blackColor,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                         ),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),

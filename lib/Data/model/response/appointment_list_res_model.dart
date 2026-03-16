@@ -54,7 +54,8 @@ class AppointmentDataModel {
       String? statusID, 
       String? statusName, 
       String? patientName, 
-      String? corporateID,}){
+      String? corporateID, 
+      String? isUploadDoc,}){
     _count = count;
     _appointmentID = appointmentID;
     _patientID = patientID;
@@ -64,6 +65,7 @@ class AppointmentDataModel {
     _statusName = statusName;
     _patientName = patientName;
     _corporateID = corporateID;
+    _isUploadDoc = isUploadDoc;
 }
 
   AppointmentDataModel.fromJson(dynamic json) {
@@ -76,6 +78,7 @@ class AppointmentDataModel {
     _statusName = json['StatusName'];
     _patientName = json['PatientName'];
     _corporateID = json['corporateID'];
+    _isUploadDoc = json['IsUploadDoc'];
   }
   num? _count;
   String? _appointmentID;
@@ -86,6 +89,7 @@ class AppointmentDataModel {
   String? _statusName;
   String? _patientName;
   String? _corporateID;
+  String? _isUploadDoc;
   AppointmentDataModel copyWith({  num? count,
   String? appointmentID,
   String? patientID,
@@ -95,6 +99,7 @@ class AppointmentDataModel {
   String? statusName,
   String? patientName,
   String? corporateID,
+  String? isUploadDoc,
 }) => AppointmentDataModel(  count: count ?? _count,
   appointmentID: appointmentID ?? _appointmentID,
   patientID: patientID ?? _patientID,
@@ -104,6 +109,7 @@ class AppointmentDataModel {
   statusName: statusName ?? _statusName,
   patientName: patientName ?? _patientName,
   corporateID: corporateID ?? _corporateID,
+  isUploadDoc: isUploadDoc ?? _isUploadDoc,
 );
   num? get count => _count;
   String? get appointmentID => _appointmentID;
@@ -114,6 +120,7 @@ class AppointmentDataModel {
   String? get statusName => _statusName;
   String? get patientName => _patientName;
   String? get corporateID => _corporateID;
+  String? get isUploadDoc => _isUploadDoc;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -126,6 +133,7 @@ class AppointmentDataModel {
     map['StatusName'] = _statusName;
     map['PatientName'] = _patientName;
     map['corporateID'] = _corporateID;
+    map['IsUploadDoc'] = _isUploadDoc;
     return map;
   }
 
