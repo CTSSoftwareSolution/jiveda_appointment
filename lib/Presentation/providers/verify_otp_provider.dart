@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/widgets/custom_loader.dart';
 import '../../Data/model/request/verify_otp_request_model.dart';
 import '../../Domain/entities/verify_otp_entity.dart';
 import '../../Domain/usecases/verify_otp_usecase.dart';
@@ -43,17 +44,28 @@ class VerifyOtpProvider extends ChangeNotifier {
     }
   }
   void onVerifyOtp({
-    required String mobile,
-  }) async {
-
-    final otp = getOtp();
-    final response = await verifyOtpApi(mobile: mobile, otp: otp);
-
-    if (response != null) {
-      debugPrint("verify response success ${response.success}");
-      debugPrint("verify response message ${response.message}");
-    }
+  required String mobile,
+  required VoidCallback onSuccess,
+}) async {
+  final otp = getOtp();
+  if (otp.length < 6) {
+    CustomLoader.errorMessage("Please enter valid OTP");
+    return;
   }
+  CustomLoader.showLoader("Verifying OTP...");
+  final response = await verifyOtpApi(mobile: mobile, otp: otp);
+  CustomLoader.closeLoader();
+  if (response != null && response.success == 1) {
+    debugPrint("OTP verified successfully");
+    onSuccess();   
+  } else {
+    debugPrint("OTP invalid");
+    CustomLoader.errorMessage(
+      response?.message ?? "Invalid OTP",
+    );
+    clearOtp();
+  }
+}
   
   void clearOtp() {
     for (var controller in otpControllers) {

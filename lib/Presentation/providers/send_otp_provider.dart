@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
+import 'package:jiveda_appointment/widgets/custom_loader.dart';
 import '../../Data/model/request/send_otp_request_model.dart';
 import '../../Domain/entities/send_otp_entity.dart';
 import '../../Domain/usecases/send_otp_usecase.dart';
@@ -47,13 +48,16 @@ class SendOtpProvider extends ChangeNotifier {
 
   void onSendOtp(VoidCallback pushOtpScreen) async {
     if (!isButtonEnabled) return;
+    CustomLoader.showLoader("Sending OTP...");
     final response = await sendOtpApi();
+    CustomLoader.closeLoader();
     if (response != null && response.success == 1) {
       await Preferences.setMobileNumber(mobileNumber);
       debugPrint("OTP sent successfully");
       pushOtpScreen();
     } else {
       debugPrint("OTP failed");
+      CustomLoader.errorMessage("Failed to send OTP");
     }
   }
 }

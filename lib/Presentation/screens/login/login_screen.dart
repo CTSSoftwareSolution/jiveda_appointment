@@ -68,7 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         10.height,
                         const CustomText(
-                          text: "We will send you one time OTP on\nthis mobile number",
+                          text:
+                              "We will send you one time OTP on\nthis mobile number",
                           fontSize: 14,
                           textColor: blackColor,
                           fontWeight: FontWeight.w300,
@@ -94,14 +95,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               horizontal: 12,
                             ),
                             onChanged: (value) {
-                              context.read<SendOtpProvider>().updateButtonState(value);
-                              },
+                              context.read<SendOtpProvider>().updateButtonState(
+                                value,
+                              );
+                            },
                           ),
                         ),
                         35.height,
                         CustomButton(
                           buttonText: "SEND OTP",
                           onPress: () {
+                            if (sendOtpProvider.isLoading) return;
                             if (formKey.currentState!.validate()) {
                               sendOtpProvider.onSendOtp(() {
                                 context.push(const OtpVerificationScreen());
