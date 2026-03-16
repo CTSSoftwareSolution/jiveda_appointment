@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/screens/appointment/shimmer_widget.dart';
 
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
@@ -27,8 +28,8 @@ Widget buildList(String? statusFilter, BuildContext context) {
   final filtered = _filterByStatus(context, statusFilter);
 
 
-  if (filtered.isEmpty) {
-    return Center(
+  filtered.isEmpty ?
+     Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -38,8 +39,8 @@ Widget buildList(String? statusFilter, BuildContext context) {
 
         ],
       ),
-    );
-  }
+    ) : buildShimmer();
+
   return RefreshIndicator(
     onRefresh: () => context.read<AppointmentListProvider>().fetchAppointments(),
     child: ListView.builder(
