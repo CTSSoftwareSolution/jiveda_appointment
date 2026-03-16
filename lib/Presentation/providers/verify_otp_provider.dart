@@ -1,12 +1,14 @@
 import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
+import 'package:jiveda_appointment/utilities/preferences.dart';
+import 'package:jiveda_appointment/widgets/custom_loader.dart';
 import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
 import '../../Data/model/request/verify_otp_request_model.dart';
 import '../../Domain/entities/verify_otp_entity.dart';
 import '../../Domain/usecases/verify_otp_usecase.dart';
 
 class VerifyOtpProvider extends ChangeNotifier {
-
   final VerifyOtpUseCase verifyOtpUseCase;
 
   VerifyOtpProvider({required this.verifyOtpUseCase});
@@ -14,7 +16,10 @@ class VerifyOtpProvider extends ChangeNotifier {
   bool isLoading = false;
   VerifyOtpEntity? verifyOtpEntity;
 
-  final List<TextEditingController> otpControllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> otpControllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
 
   final List<FocusNode> focusNodes = List.generate(6, (index) => FocusNode());
 
@@ -30,7 +35,10 @@ class VerifyOtpProvider extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      VerifyOtpRequestModel requestModel = VerifyOtpRequestModel(mobile: mobile, otp: otp);
+      VerifyOtpRequestModel requestModel = VerifyOtpRequestModel(
+        mobile: mobile,
+        otp: otp,
+      );
       verifyOtpEntity = await verifyOtpUseCase.execute(requestModel);
       debugPrint("verify otp success ${verifyOtpEntity?.success}");
       debugPrint("verify otp message ${verifyOtpEntity?.message}");
@@ -44,23 +52,61 @@ class VerifyOtpProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  void onVerifyOtp({
-    required String mobile, required BuildContext context
-  }) async {
 
+  void onVerifyOtp({
+    required VoidCallback onSuccess,
+    required SendOtpProvider sendOtpProvider,
+  }) async {
+    final mobile = sendOtpProvider.mobileNumber;
     final otp = getOtp();
+
+    if (otp.length < 6) {
+      CustomLoader.errorMessage("Please enter valid OTP");
+      return;
+    }
+
+    CustomLoader.showLoader("Verifying OTP...");
+
     final response = await verifyOtpApi(mobile: mobile, otp: otp);
 
-    if (response != null) {
-      debugPrint("verify response success ${response.success}");
-      debugPrint("verify response message ${response.message}");
-      context.push(AppointmentScreen());
+    CustomLoader.closeLoader();
+
+    if (response != null && response.success == 1) {
+
+      final user = response.data;
+
+      Preferences.setUserId(user?.userID ?? "");
+      Preferences.setUserName(user?.userName ?? "");
+      Preferences.setPatientId(user?.patientID ?? "");
+      Preferences.setEmail(user?.email ?? "");
+      Preferences.setMobile(user?.mobile ?? "");
+      Preferences.setFirstName(user?.firstName ?? "");
+      Preferences.setLastName(user?.lastName ?? "");
+      Preferences.setPatientName(user?.patientName ?? "");
+      Preferences.setTokenId(user?.tokenID ?? "");
+      Preferences.setRoleId(user?.roleID ?? "");
+      
+      onSuccess();
+    } else {
+      CustomLoader.errorMessage(response?.message ?? "Invalid OTP");
+      clearOtp();
     }
   }
-  
+
   void clearOtp() {
     for (var controller in otpControllers) {
       controller.clear();
     }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in otpControllers) {
+      controller.dispose();
+    }
+    for (var node in focusNodes) {
+      node.dispose();
+    }
+    super.dispose();
   }
 }

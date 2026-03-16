@@ -21,10 +21,17 @@ class AppointmentCountProvider extends ChangeNotifier{
 
 
 
-  int getCount(int statusId){
-    return count.firstWhere((e) =>
-    e.statusID == statusId, orElse: () => CountDataModel(statusID: statusId, totalCount: 0)).totalCount?.toInt() ?? 0;
-  }
+
+  // int getCount(int statusId){
+  //   return count.firstWhere((e) =>
+  //   e.statusID == statusId).totalCount?.toInt() ?? 0;
+  // }
+
+   int getCount(int statusId){
+return count.firstWhere((e) =>
+e.statusID == statusId, orElse: () => CountDataModel(statusID: statusId, totalCount: 0)).totalCount?.toInt() ?? 0;
+} 
+  
 
 
   Future<void> fetchCounts() async {
