@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/Presentation/providers/otp_timer_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/document_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/splash_screen_provider.dart';
@@ -32,7 +31,6 @@ class MultipleProvider extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AppointmentListProvider(appointmentListUseCases: AppointmentListUseCases(appointmentListRepository: AppointmentListRepositoryImpl()))),
         ChangeNotifierProvider(create: (_) => AppointmentCountProvider(appointmentCountUseCases: AppointmentCountUseCases(appointmentCountRepository: AppointmentCountRepImpl()))),
         ChangeNotifierProvider(create: (_) => DocumentProvider()),
-        ChangeNotifierProvider(create: (_) => OtpTimerProvider()),
         ChangeNotifierProvider(create: (_) => SendOtpProvider(sendOtpUseCase: SendOtpUseCase(sendOtpRepository: SendOtpRepositoryImpl()))),
         ChangeNotifierProvider(create: (_) => VerifyOtpProvider(verifyOtpUseCase: VerifyOtpUseCase(verifyOtpRepository: VerifyOtpRepositoryImpl()))),
         ChangeNotifierProvider(create: (_) => DocumentProvider())
