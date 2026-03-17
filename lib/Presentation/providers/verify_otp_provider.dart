@@ -72,20 +72,23 @@ class VerifyOtpProvider extends ChangeNotifier {
     CustomLoader.closeLoader();
 
     if (response != null && response.success == 1) {
+      final user = response.data as Map<String, dynamic>?;
 
-      final user = response.data;
+      Preferences.setUserId(user?['UserID'] ?? "");
+      Preferences.setUserName(user?['UserName'] ?? "");
+      Preferences.setPatientId(user?['PatientID'] ?? "");
+      Preferences.setEmail(user?['Email'] ?? "");
+      Preferences.setMobile(user?['Mobile'] ?? "");
+      Preferences.setFirstName(user?['FirstName'] ?? "");
+      Preferences.setLastName(user?['LastName'] ?? "");
+      Preferences.setPatientName(user?['PatientName'] ?? "");
+      Preferences.setTokenId(user?['TokenID'] ?? "");
+      Preferences.setRoleId(user?['RoleID'] ?? "");
 
-      Preferences.setUserId(user?.userID ?? "");
-      Preferences.setUserName(user?.userName ?? "");
-      Preferences.setPatientId(user?.patientID ?? "");
-      Preferences.setEmail(user?.email ?? "");
-      Preferences.setMobile(user?.mobile ?? "");
-      Preferences.setFirstName(user?.firstName ?? "");
-      Preferences.setLastName(user?.lastName ?? "");
-      Preferences.setPatientName(user?.patientName ?? "");
-      Preferences.setTokenId(user?.tokenID ?? "");
-      Preferences.setRoleId(user?.roleID ?? "");
-      
+       debugPrint("Preferences set:");
+       debugPrint("UserId: ${Preferences.getUserId()}");
+       debugPrint("UserName: ${Preferences.getUserName()}");
+
       onSuccess();
     } else {
       CustomLoader.errorMessage(response?.message ?? "Invalid OTP");

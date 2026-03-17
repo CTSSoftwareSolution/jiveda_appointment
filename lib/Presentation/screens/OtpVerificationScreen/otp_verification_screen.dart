@@ -6,7 +6,6 @@ import 'package:jiveda_appointment/Presentation/providers/verify_otp_provider.da
 import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
 import 'package:jiveda_appointment/utilities/otp_fields.dart';
 import 'package:provider/provider.dart';
-import 'package:jiveda_appointment/Presentation/providers/otp_timer_provider.dart';
 import 'package:jiveda_appointment/widgets/custom_button.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
@@ -16,30 +15,31 @@ class OtpVerificationScreen extends StatefulWidget {
   const OtpVerificationScreen({super.key});
 
   @override
-  State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
+  State<OtpVerificationScreen> createState() => OtpVerificationScreenState();
 }
 
-class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
+class OtpVerificationScreenState extends State<OtpVerificationScreen>
+    with TimerMixin {
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final otpTimer = context.read<OtpTimerProvider>();
       final verifyOtpProvider = context.read<VerifyOtpProvider>();
-      otpTimer.startTimer();
-      FocusScope.of(context).requestFocus(verifyOtpProvider.focusNodes[0]);
+      startTimer(() {}); 
+      FocusScope.of(context).requestFocus(verifyOtpProvider.focusNodes[0],);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
     final screenWidth = MediaQuery.of(context).size.width;
     final mobileNumber = context.watch<SendOtpProvider>().mobileNumber;
-    final otpSeconds = context.watch<OtpTimerProvider>().seconds;
     final verifyOtpProvider = context.read<VerifyOtpProvider>();
     final sendOtpProvider = context.read<SendOtpProvider>();
-    final otpTimer = context.read<OtpTimerProvider>();
+    final otpSeconds = secondsRemaining;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -79,7 +79,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         ),
                         children: [
                           TextSpan(
-                            text: "We have sent a verification code to\n+91 - $mobileNumber  ",
+                            text:
+                                "We have sent a verification code to\n+91 - $mobileNumber  ",
                           ),
                           TextSpan(
                             text: "(Edit?)",
@@ -102,9 +103,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       child: GestureDetector(
                         onTap: () {
                           if (otpSeconds == 0) {
-                            sendOtpProvider.onSendOtp(() {
-                              otpTimer.startTimer();
-                            });
+                            sendOtpProvider.onSendOtp(() {});
+                            startTimer(() {}); 
                             verifyOtpProvider.clearOtp();
                           }
                         },
@@ -115,7 +115,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           fontSize: 14,
                           textColor: blackColor,
                         ),
-                    ),
+                      ),
                     ),
                     40.height,
                     CustomButton(
