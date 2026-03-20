@@ -3,6 +3,7 @@ import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:provider/provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/bottom_navigation_provider.dart';
 import 'package:jiveda_appointment/utilities/image_data.dart';
+import 'package:jiveda_appointment/widgets/custom_image.dart';
 
 class BottomNavigationPage extends StatefulWidget {
   const BottomNavigationPage({super.key});
@@ -43,8 +44,8 @@ class BottomNavigationPageState extends State<BottomNavigationPage> {
               BottomNavigationBarItem(
                 icon: Column(
                   children: [
-                    Image.asset(
-                      homeImage,
+                    CustomImage(
+                      image: homeImage,
                       scale: 25,
                       color: navigationProvider.currentIndex == 0
                           ? appColor
@@ -58,8 +59,8 @@ class BottomNavigationPageState extends State<BottomNavigationPage> {
               BottomNavigationBarItem(
                 icon: Column(
                   children: [
-                    Image.asset(
-                      appointmentImage,
+                    CustomImage(
+                      image: appointmentImage,
                       scale: 25,
                       color: navigationProvider.currentIndex == 1
                           ? appColor
@@ -70,12 +71,11 @@ class BottomNavigationPageState extends State<BottomNavigationPage> {
                 ),
                 label: "Appointment",
               ),
-
               BottomNavigationBarItem(
                 icon: Column(
                   children: [
-                    Image.asset(
-                      profileImage,
+                    CustomImage(
+                      image: profileImage,
                       scale: 25,
                       color: navigationProvider.currentIndex == 2
                           ? appColor
@@ -92,12 +92,8 @@ class BottomNavigationPageState extends State<BottomNavigationPage> {
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             top: 0,
-            left:
-                (navigationProvider.currentIndex *
-                        MediaQuery.of(context).size.width /
-                        3) +
-                    (MediaQuery.of(context).size.width / 3 - 40) / 2,
-
+            left:(
+            navigationProvider.currentIndex * MediaQuery.of(context).size.width / 3) + (MediaQuery.of(context).size.width / 3 - 40) / 2,
             child: Container(
               height: 3,
               width: 40,

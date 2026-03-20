@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 
+import 'custom_text.dart';
+import 'custom_image.dart';
+
 class MenuItem extends StatelessWidget {
   final String title;
-  final String imagePath; 
+  final String imagePath;
 
   const MenuItem({
     super.key,
     required this.title,
-    required this.imagePath, 
+    required this.imagePath,
   });
 
   @override
@@ -33,22 +36,20 @@ class MenuItem extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: Image.asset(
-              imagePath,
-              height: 20, 
+            child: CustomImage(
+              image: imagePath,
+              height: 20,
               width: 20,
-              color: whiteColor, 
+              color: whiteColor,
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                color: blackColor,
-                fontWeight: FontWeight.w500,
-              ),
+            child: CustomText(
+              text: title,
+              fontSize: 16,
+              textColor: blackColor,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const Icon(Icons.arrow_forward_ios, size: 16, color: textHintColor),

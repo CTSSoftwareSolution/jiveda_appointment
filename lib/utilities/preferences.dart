@@ -15,6 +15,8 @@ class Preferences {
   static String patientName = "patientName";
   static String tokenId = "tokenId";
   static String roleId = "roleId";
+  static String orgName = "orgName";
+  static String orgServiceProviderId = "orgServiceProviderId";
 
   static Future<void> setPreferences() async {
     instance = await SharedPreferences.getInstance();
@@ -41,6 +43,8 @@ class Preferences {
   static Future<bool> setPatientName(String value) => setString(patientName, value);
   static Future<bool> setTokenId(String value) => setString(tokenId, value);
   static Future<bool> setRoleId(String value) => setString(roleId, value);
+  static Future<bool> setOrgName(String value) => setString(orgName, value);
+  static Future<bool> setOrgServiceProviderId(String value) => setString(orgServiceProviderId, value);
 
   static dynamic getMobileNumber() => getString(mobileNumber);
   static dynamic getUserId() => getString(userId);
@@ -53,4 +57,6 @@ class Preferences {
   static dynamic getPatientName() => getString(patientName);
   static dynamic getTokenId() => getString(tokenId);
   static dynamic getRoleId() => getString(roleId);
+  static dynamic getOrgName() => getString(orgName);
+  static dynamic getOrgServiceProviderId() => getString(orgServiceProviderId);
 }

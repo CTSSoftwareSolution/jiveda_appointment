@@ -84,6 +84,8 @@ class VerifyOtpProvider extends ChangeNotifier {
       Preferences.setPatientName(user?['PatientName'] ?? "");
       Preferences.setTokenId(user?['TokenID'] ?? "");
       Preferences.setRoleId(user?['RoleID'] ?? "");
+      Preferences.setOrgName(user?['OrgName'] ?? "");
+      Preferences.setOrgServiceProviderId(user?['OrgServiceProviderID'] ?? "");
 
        debugPrint("Preferences set:");
        debugPrint("UserId: ${Preferences.getUserId()}");

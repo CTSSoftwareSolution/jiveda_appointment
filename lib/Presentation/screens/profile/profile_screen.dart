@@ -6,7 +6,7 @@ import 'package:jiveda_appointment/utilities/image_data.dart';
 import 'package:jiveda_appointment/widgets/logout_dialog.dart';
 import 'package:jiveda_appointment/widgets/profile_menu_item.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
-
+import '../../../widgets/custom_text.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -22,15 +22,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: appColor,
         elevation: 0,
-        centerTitle: true,
+        centerTitle: false,
         automaticallyImplyLeading: false,
-        title: const Text(
-          "Profile",
-          style: TextStyle(
-            color: whiteColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
+        title: const CustomText(
+          text: "Profile",
+          textColor: whiteColor,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
         ),
       ),
       backgroundColor: surfaceColor,
@@ -38,7 +36,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 0),
               child: Column(
                 children: [
                   const SizedBox(height: 16),
@@ -55,21 +52,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
-                            Text(
-                              "SADASHIV MHATRE",
-                              style: TextStyle(
-                                color: whiteColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            CustomText(
+                              text: "SADASHIV MHATRE",
+                              textColor: whiteColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                             SizedBox(height: 5),
-                            Text(
-                              "sadashiv@gmail.com",
-                              style: TextStyle(
-                                color: lightWhiteColor,
-                                fontSize: 14,
-                              ),
+                            CustomText(
+                              text: "sadashiv@gmail.com",
+                              textColor: lightWhiteColor,
+                              fontSize: 14,
                             ),
                           ],
                         ),
@@ -89,17 +82,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const MenuItem(
-                      title: "Terms & Conditions",
-                      imagePath: termsAndConditionImage),
-                  const MenuItem(
-                      title: "Privacy Policy",
-                      imagePath: privacyPolicyImage),
-                   GestureDetector(
+                  const MenuItem(title: "Terms & Conditions", imagePath: termsAndConditionImage),
+                  const MenuItem(title: "Privacy Policy", imagePath: privacyPolicyImage),
+                  GestureDetector(
                     onTap: () {
                       showDialog(
                         context: context,
-                        barrierDismissible: false, 
+                        barrierDismissible: false,
                         builder: (context) => LogoutDialog(
                           onYes: () async {
                             Navigator.of(context).pop();
@@ -113,22 +102,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                     child: const MenuItem(
-                        title: "Logout",
-                        imagePath: logoutImage),
-                  )
+                      title: "Logout",
+                      imagePath: logoutImage,
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-
-          // Fixed Version Text at Bottom
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             alignment: Alignment.center,
             color: surfaceColor,
-            child: const Text(
-              "Version: 1.1.130",
-              style: TextStyle(color: blackColor, fontSize: 14),
+            child: const CustomText(
+              text: "Version: 1.1.130",
+              textColor: blackColor,
+              fontSize: 14,
             ),
           ),
         ],

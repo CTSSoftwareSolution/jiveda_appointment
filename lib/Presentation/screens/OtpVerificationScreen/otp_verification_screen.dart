@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/verify_otp_provider.dart';
-import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
+import 'package:jiveda_appointment/Presentation/screens/bottom_navigation/bottom_navigation_screen.dart';
 import 'package:jiveda_appointment/utilities/otp_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:jiveda_appointment/widgets/custom_button.dart';
@@ -126,7 +126,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                         verifyOtpProvider.onVerifyOtp(
                           sendOtpProvider: sendOtpProvider,
                           onSuccess: () {
-                            context.push(const AppointmentScreen());
+                            context.push(const BottomNavigationPage());
                           },
                         );
                       },
