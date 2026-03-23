@@ -20,9 +20,6 @@ class VerifyOtpProvider extends ChangeNotifier {
     6,
     (index) => TextEditingController(),
   );
-
-  final List<FocusNode> focusNodes = List.generate(6, (index) => FocusNode());
-
   String getOtp() {
     return otpControllers.map((e) => e.text).join();
   }
@@ -34,15 +31,11 @@ class VerifyOtpProvider extends ChangeNotifier {
     try {
       isLoading = true;
       notifyListeners();
-
       VerifyOtpRequestModel requestModel = VerifyOtpRequestModel(
         mobile: mobile,
         otp: otp,
       );
       verifyOtpEntity = await verifyOtpUseCase.execute(requestModel);
-      debugPrint("verify otp success ${verifyOtpEntity?.success}");
-      debugPrint("verify otp message ${verifyOtpEntity?.message}");
-      debugPrint("verify otp data ${verifyOtpEntity?.data}");
       return verifyOtpEntity;
     } catch (e) {
       debugPrint("verify otp error: $e");
@@ -75,24 +68,24 @@ class VerifyOtpProvider extends ChangeNotifier {
     FocusManager.instance.primaryFocus?.unfocus();
 
     if (response != null && response.success == 1) {
-      final user = response.data as Map<String, dynamic>?;
+      final user = response.data;
 
-      Preferences.setUserId(user?['UserID'] ?? "");
-      Preferences.setUserName(user?['UserName'] ?? "");
-      Preferences.setPatientId(user?['PatientID'] ?? "");
-      Preferences.setEmail(user?['Email'] ?? "");
-      Preferences.setMobile(user?['Mobile'] ?? "");
-      Preferences.setFirstName(user?['FirstName'] ?? "");
-      Preferences.setLastName(user?['LastName'] ?? "");
-      Preferences.setPatientName(user?['PatientName'] ?? "");
-      Preferences.setTokenId(user?['TokenID'] ?? "");
-      Preferences.setRoleId(user?['RoleID'] ?? "");
-      Preferences.setOrgName(user?['OrgName'] ?? "");
-      Preferences.setOrgServiceProviderId(user?['OrgServiceProviderID'] ?? "");
+      Preferences.setUserId(user?.userId ?? "");
+      Preferences.setUserName(user?.userName ?? "");
+      Preferences.setPatientId(user?.patientId ?? "");
+      Preferences.setEmail(user?.email ?? "");
+      Preferences.setMobile(user?.mobile ?? "");
+      Preferences.setFirstName(user?.firstName ?? "");
+      Preferences.setLastName(user?.lastName ?? "");
+      Preferences.setPatientName(user?.userName ?? ""); 
+      Preferences.setTokenId(user?.tokenId ?? "");
+      Preferences.setRoleId(user?.roleId ?? "");
+      Preferences.setOrgName(user?.orgName ?? "");
+      Preferences.setOrgServiceProviderId(user?.orgServiceProviderId ?? "");
 
-       debugPrint("Preferences set:");
-       debugPrint("UserId: ${Preferences.getUserId()}");
-       debugPrint("UserName: ${Preferences.getUserName()}");
+      debugPrint("Preferences set:");
+      debugPrint("UserId: ${Preferences.getUserId()}");
+      debugPrint("UserName: ${Preferences.getUserName()}");
 
       onSuccess();
     } else {
@@ -110,9 +103,6 @@ class VerifyOtpProvider extends ChangeNotifier {
   void dispose() {
     for (var controller in otpControllers) {
       controller.dispose();
-    }
-    for (var node in focusNodes) {
-      node.dispose();
     }
     super.dispose();
   }

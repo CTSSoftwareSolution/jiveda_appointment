@@ -54,16 +54,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             CustomText(
-                              text: "SADASHIV MHATRE",
+                              text: Preferences.getUserName(),
                               textColor: whiteColor,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                             SizedBox(height: 5),
                             CustomText(
-                              text: "sadashiv@gmail.com",
+                              text: Preferences.getEmail(),
                               textColor: lightWhiteColor,
                               fontSize: 14,
                             ),

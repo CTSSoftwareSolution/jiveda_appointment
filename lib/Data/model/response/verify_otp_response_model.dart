@@ -1,10 +1,11 @@
+import 'package:jiveda_appointment/Data/model/response/user_model.dart';
 import '../../../Domain/entities/verify_otp_entity.dart';
 
 class VerifyOtpResponseModel extends VerifyOtpEntity {
   VerifyOtpResponseModel({
     int? success,
     String? message,
-    dynamic data,
+    UserModel? data,
   }) {
     _success = success;
     _message = message;
@@ -14,17 +15,19 @@ class VerifyOtpResponseModel extends VerifyOtpEntity {
   VerifyOtpResponseModel.fromJson(dynamic json) {
     _success = json['success'];
     _message = json['message'];
-    _data = json['data'];
+    _data = json['data'] != null
+        ? UserModel.fromJson(json['data'])
+        : null;
   }
 
   int? _success;
   String? _message;
-  dynamic _data;
+  UserModel? _data;
 
   VerifyOtpResponseModel copyWith({
     int? success,
     String? message,
-    dynamic data,
+    UserModel? data,
   }) =>
       VerifyOtpResponseModel(
         success: success ?? _success,
@@ -39,13 +42,13 @@ class VerifyOtpResponseModel extends VerifyOtpEntity {
   String? get message => _message;
 
   @override
-  dynamic get data => _data;
+  UserModel? get data => _data;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['success'] = _success;
     map['message'] = _message;
-    map['data'] = _data;
+    map['data'] = _data?.toJson(); 
     return map;
   }
 }

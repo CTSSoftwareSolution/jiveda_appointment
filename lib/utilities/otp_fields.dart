@@ -84,8 +84,6 @@ class _OtpFieldRowState extends State<OtpFieldRow> {
             if (value.isNotEmpty) {
               if (index < focusNodes.length - 1) {
                 focusNodes[index + 1].requestFocus();
-              } else {
-                FocusScope.of(context).unfocus();
               }
             }
           },
