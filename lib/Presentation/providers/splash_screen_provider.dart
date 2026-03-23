@@ -13,16 +13,13 @@ class SplashScreenProvider extends ChangeNotifier{
     Timer(const Duration(seconds: 2), () async {
 
       await Preferences.setPreferences();
-      String userId = Preferences.getUserId();
+      String? userId = Preferences.getUserId();
 
-      if (userId.isEmpty) {
-        if (context.mounted) {
-          context.push(const LoginScreen());
-        }
+      if (!context.mounted) return;
+      if (userId == null || userId.isEmpty) {
+        context.pushReplacement(const LoginScreen());
       } else {
-        if (context.mounted) {
-          context.push(const BottomNavigationPage());
-        }
+        context.pushReplacement(const BottomNavigationPage());
       }
     });
   }

@@ -1,11 +1,13 @@
 import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/screens/login/login_screen.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/utilities/image_data.dart';
 import 'package:jiveda_appointment/widgets/logout_dialog.dart';
 import 'package:jiveda_appointment/widgets/profile_menu_item.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
+import 'package:provider/provider.dart';
 import '../../../widgets/custom_text.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,6 +18,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,6 +96,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onYes: () async {
                             Navigator.of(context).pop();
                             await Preferences.clear();
+                            final sendOtpProvider = context.read<SendOtpProvider>();
+                              sendOtpProvider.mobileController.clear();
+                              sendOtpProvider.mobileNumber = "";
+                              sendOtpProvider.isButtonEnabled = false;
+                              sendOtpProvider.notifyListeners();
                             context.push(LoginScreen());
                           },
                           onNo: () {

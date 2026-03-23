@@ -71,6 +71,9 @@ class VerifyOtpProvider extends ChangeNotifier {
 
     CustomLoader.closeLoader();
 
+    clearOtp();
+    FocusManager.instance.primaryFocus?.unfocus();
+
     if (response != null && response.success == 1) {
       final user = response.data as Map<String, dynamic>?;
 
@@ -94,7 +97,6 @@ class VerifyOtpProvider extends ChangeNotifier {
       onSuccess();
     } else {
       CustomLoader.errorMessage(response?.message ?? "Invalid OTP");
-      clearOtp();
     }
   }
 

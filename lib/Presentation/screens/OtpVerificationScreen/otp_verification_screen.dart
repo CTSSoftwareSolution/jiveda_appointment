@@ -20,20 +20,18 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class OtpVerificationScreenState extends State<OtpVerificationScreen>
     with TimerMixin {
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final verifyOtpProvider = context.read<VerifyOtpProvider>();
-      startTimer(() {}); 
-      FocusScope.of(context).requestFocus(verifyOtpProvider.focusNodes[0],);
+      verifyOtpProvider.clearOtp();
+      startTimer(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     final screenWidth = MediaQuery.of(context).size.width;
     final mobileNumber = context.watch<SendOtpProvider>().mobileNumber;
     final verifyOtpProvider = context.read<VerifyOtpProvider>();
@@ -96,7 +94,6 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                     35.height,
                     OtpFieldRow(
                       controllers: verifyOtpProvider.otpControllers,
-                      focusNodes: verifyOtpProvider.focusNodes,
                     ),
                     20.height,
                     Center(
@@ -104,7 +101,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                         onTap: () {
                           if (otpSeconds == 0) {
                             sendOtpProvider.onSendOtp(() {});
-                            startTimer(() {}); 
+                            startTimer(() {});
                             verifyOtpProvider.clearOtp();
                           }
                         },
