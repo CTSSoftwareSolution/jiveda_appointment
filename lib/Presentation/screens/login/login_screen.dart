@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final sendOtpProvider = context.read<SendOtpProvider>();
     final buttonColor = context.watch<SendOtpProvider>().sendButtonColor;
+    final isEnabled = context.watch<SendOtpProvider>().isButtonEnabled;
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -82,27 +83,29 @@ class _LoginScreenState extends State<LoginScreen> {
                             textCapitalization: TextCapitalization.none,
                             fillColor: scaffoldBgColor,
                             inputFormatters: InputFormatters.mobileNumber,
-                            validator: (value) => Validators.mobileValidation(value!, context),
+                            validator: null,
                             hintStyle: const TextStyle(
                               color: textHintColor,
                               fontSize: 14,
                             ),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                            ),
                             onChanged: (value) {
-                               context.read<SendOtpProvider>().onMobileChanged();
-                              },
+                              context.read<SendOtpProvider>().onMobileChanged();
+                            },
                           ),
                         ),
                         35.height,
                         CustomButton(
                           buttonText: "SEND OTP",
                           onPress: () async {
-                            if (sendOtpProvider.isLoading) return;
-                            if (formKey.currentState!.validate()) {
-                              final success = await context.read<SendOtpProvider>().onSendOtp();
-                              if (success) {
-                                context.push(const OtpVerificationScreen());
-                              }
+                            if (!isEnabled || sendOtpProvider.isLoading) return;
+                            final success = await context
+                                .read<SendOtpProvider>()
+                                .sendOtpApi();
+                            if (success) {
+                              context.push(const OtpVerificationScreen());
                             }
                           },
                           backgroundColor: buttonColor,

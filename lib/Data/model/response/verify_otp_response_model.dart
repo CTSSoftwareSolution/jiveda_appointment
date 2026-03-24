@@ -2,11 +2,7 @@ import 'package:jiveda_appointment/Data/model/response/user_model.dart';
 import '../../../Domain/entities/verify_otp_entity.dart';
 
 class VerifyOtpResponseModel extends VerifyOtpEntity {
-  VerifyOtpResponseModel({
-    int? success,
-    String? message,
-    UserModel? data,
-  }) {
+  VerifyOtpResponseModel({int? success, String? message, UserModel? data}) {
     _success = success;
     _message = message;
     _data = data;
@@ -15,9 +11,11 @@ class VerifyOtpResponseModel extends VerifyOtpEntity {
   VerifyOtpResponseModel.fromJson(dynamic json) {
     _success = json['success'];
     _message = json['message'];
-    _data = json['data'] != null
-        ? UserModel.fromJson(json['data'])
-        : null;
+    if (json['data'] != null && json['data'] is Map<String, dynamic>) {
+      _data = UserModel.fromJson(json['data']);
+    } else {
+      _data = null;
+    }
   }
 
   int? _success;
@@ -28,12 +26,11 @@ class VerifyOtpResponseModel extends VerifyOtpEntity {
     int? success,
     String? message,
     UserModel? data,
-  }) =>
-      VerifyOtpResponseModel(
-        success: success ?? _success,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => VerifyOtpResponseModel(
+    success: success ?? _success,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   @override
   int? get success => _success;
@@ -48,7 +45,7 @@ class VerifyOtpResponseModel extends VerifyOtpEntity {
     final map = <String, dynamic>{};
     map['success'] = _success;
     map['message'] = _message;
-    map['data'] = _data?.toJson(); 
+    map['data'] = _data?.toJson();
     return map;
   }
 }

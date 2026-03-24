@@ -20,50 +20,35 @@ class SendOtpProvider extends ChangeNotifier {
 
   Color get sendButtonColor => isButtonEnabled ? appColor : buttonBgGreyColor;
 
-  Future<SendOtpEntity?> sendOtpApi() async {
+  Future<bool> sendOtpApi() async {
     try {
       isLoading = true;
+      CustomLoader.showLoader("Sending OTP...");
       notifyListeners();
       final mobile = mobileController.text;
       final requestModel = SendOtpRequestModel(mobile: int.parse(mobile));
-      sendOtpEntity = await sendOtpUseCase.execute(requestModel);
-      return sendOtpEntity;
-    } catch (e) {
-      debugPrint("SEND OTP error $e");
-      return null;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<bool> onSendOtp() async {
-    if (!isButtonEnabled) {
-      CustomLoader.errorMessage("Enter valid mobile number");
-      return false;
-    }
-    CustomLoader.showLoader("Sending OTP...");
-    try {
-      final response = await sendOtpApi();
-      if (response != null && response.success == 1) {
-        final mobile = mobileController.text;
+      final response = await sendOtpUseCase.execute(requestModel);
+      if (response.success == 1) {
         await Preferences.setMobileNumber(mobile);
         return true;
       } else {
-        CustomLoader.errorMessage(response?.message ?? "Failed to send OTP");
+        CustomLoader.errorMessage(response.message ?? "Failed to send OTP");
         return false;
       }
     } catch (e) {
+      debugPrint("SEND OTP error $e");
       CustomLoader.errorMessage("Something went wrong");
       return false;
     } finally {
+      isLoading = false;
       CustomLoader.closeLoader();
+      notifyListeners();
     }
   }
 
   void onMobileChanged() {
-  notifyListeners();
-}
+    notifyListeners();
+  }
 
   @override
   void dispose() {

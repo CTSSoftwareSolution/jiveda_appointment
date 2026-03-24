@@ -98,7 +98,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       child: GestureDetector(
                         onTap: () async {
                           if (otpSeconds == 0) {
-                            final success = await sendOtpProvider.onSendOtp();
+                            final success = await sendOtpProvider.sendOtpApi();
                             if (success) {
                               startTimer(() {});
                               verifyOtpProvider.clearOtp();
@@ -120,8 +120,9 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       width: double.infinity,
                       buttonText: "VERIFY",
                       onPress: () async {
-                        final success = await context.read<VerifyOtpProvider>().onVerifyOtp();
+                        final success = await context.read<VerifyOtpProvider>().verifyOtpApi();
                         if (success) {
+                           context.read<VerifyOtpProvider>().clearOtp();
                           context.push(const BottomNavigationPage());
                         }
                       },

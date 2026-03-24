@@ -13,52 +13,28 @@ class VerifyOtpProvider extends ChangeNotifier {
   bool isLoading = false;
   VerifyOtpEntity? verifyOtpEntity;
 
-  final List<TextEditingController> otpControllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> otpControllers = List.generate(
+    6,
+    (_) => TextEditingController(),
+  );
 
   String getOtp() {
     return otpControllers.map((e) => e.text).join();
   }
 
-  Future<VerifyOtpEntity?> verifyOtpApi() async {
+  Future<bool> verifyOtpApi() async {
     try {
       isLoading = true;
+      CustomLoader.showLoader("Verifying OTP...");
       notifyListeners();
-
       final mobile = Preferences.getMobileNumber();
       final otp = getOtp();
+      final requestModel = VerifyOtpRequestModel(mobile: mobile ?? "", otp: otp);
+      final response = await verifyOtpUseCase.execute(requestModel);
 
-      final requestModel = VerifyOtpRequestModel(
-        mobile: mobile ?? "",
-        otp: otp,
-      );
-
-      verifyOtpEntity = await verifyOtpUseCase.execute(requestModel);
-
-      return verifyOtpEntity;
-    } catch (e) {
-      debugPrint("verify otp error: $e");
-      return null;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<bool> onVerifyOtp() async {
-    final otp = getOtp();
-
-    if (otp.length < 6) {
-      CustomLoader.errorMessage("Please enter valid OTP");
-      return false;
-    }
-    CustomLoader.showLoader("Verifying OTP...");
-
-    try {
-      final response = await verifyOtpApi();
-
-      if (response != null && response.success == 1) {
+      if (response.success == 1) {
         final user = response.data;
-
+          await Preferences.setPreferences();
         Preferences.setUserId(user?.userId ?? "");
         Preferences.setUserName(user?.userName ?? "");
         Preferences.setPatientId(user?.patientId ?? "");
@@ -71,19 +47,20 @@ class VerifyOtpProvider extends ChangeNotifier {
         Preferences.setRoleId(user?.roleId ?? "");
         Preferences.setOrgName(user?.orgName ?? "");
         Preferences.setOrgServiceProviderId(user?.orgServiceProviderId ?? "");
-
         return true;
       } else {
-        CustomLoader.errorMessage(response?.message ?? "Invalid OTP");
+        CustomLoader.errorMessage(response.message ?? "Invalid OTP");
         return false;
       }
     } catch (e) {
+      debugPrint("verify otp error: $e");
       CustomLoader.errorMessage("Something went wrong");
       return false;
     } finally {
+      isLoading = false;
       CustomLoader.closeLoader();
-      clearOtp();
       FocusManager.instance.primaryFocus?.unfocus();
+      notifyListeners();
     }
   }
 

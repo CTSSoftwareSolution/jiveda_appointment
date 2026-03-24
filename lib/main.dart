@@ -12,7 +12,6 @@ import 'Presentation/providers/multi_provider.dart';
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
-  await Preferences.setPreferences();
   runApp(const MultipleProvider());
 }
 
