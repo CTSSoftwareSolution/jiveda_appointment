@@ -34,9 +34,10 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final mobileNumber = context.watch<SendOtpProvider>().mobileController.text;
     final verifyOtpProvider = Provider.of<VerifyOtpProvider>(context, listen: false);
     final sendOtpProvider = Provider.of<SendOtpProvider>(context, listen: false);
+    final bottomNavProvider = Provider.of<BottomNavigationProvider>(context, listen: false);
+    final mobileNumber = sendOtpProvider.mobileController.text;
     final otpSeconds = secondsRemaining;
 
     return Scaffold(
@@ -121,14 +122,13 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       width: double.infinity,
                       buttonText: "VERIFY",
                       onPress: () async {
-                        final mobile = sendOtpProvider.mobileController.text; 
-                        final success = await verifyOtpProvider.verifyOtpApi(mobile);
-                        if (success) {
-                          context.read<BottomNavigationProvider>().updateIndex(0);
-                           context.read<VerifyOtpProvider>().clearOtp();
-                          context.push(const BottomNavigationPage());
-                        }
-                      },
+                      final success = await verifyOtpProvider.verifyOtpApi(context);
+                      if (success) {
+                        bottomNavProvider.updateIndex(0);
+                        verifyOtpProvider.clearOtp();
+                        context.push(const BottomNavigationPage());
+                      }
+                    },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(

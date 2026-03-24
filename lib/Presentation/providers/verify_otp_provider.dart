@@ -19,18 +19,19 @@ class VerifyOtpProvider extends ChangeNotifier {
     6,
     (_) => TextEditingController(),
   );
-
+  
   String getOtp() {
     return otpControllers.map((e) => e.text).join();
   }
 
-  Future<bool> verifyOtpApi(String mobile) async {
+  Future<bool> verifyOtpApi(BuildContext context) async {
     try {
       isLoading = true;
       CustomLoader.showLoader("Verifying OTP...");
       notifyListeners();
+      final sendOtpProvider = Provider.of<SendOtpProvider>(context, listen: false);
       final otp = getOtp();
-      final requestModel = VerifyOtpRequestModel(mobile: mobile, otp: otp);
+      final requestModel = VerifyOtpRequestModel(mobile: sendOtpProvider.mobileController.text, otp: otp);
       final response = await verifyOtpUseCase.execute(requestModel);
 
       if (response.success == 1) {
