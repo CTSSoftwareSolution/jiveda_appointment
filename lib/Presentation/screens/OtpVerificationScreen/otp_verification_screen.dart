@@ -1,6 +1,7 @@
 import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/bottom_navigation_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/verify_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/screens/bottom_navigation/bottom_navigation_screen.dart';
@@ -34,8 +35,8 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final mobileNumber = context.watch<SendOtpProvider>().mobileController.text;
-    final verifyOtpProvider = context.read<VerifyOtpProvider>();
-    final sendOtpProvider = context.read<SendOtpProvider>();
+    final verifyOtpProvider = Provider.of<VerifyOtpProvider>(context, listen: false);
+    final sendOtpProvider = Provider.of<SendOtpProvider>(context, listen: false);
     final otpSeconds = secondsRemaining;
 
     return Scaffold(
@@ -120,8 +121,10 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       width: double.infinity,
                       buttonText: "VERIFY",
                       onPress: () async {
-                        final success = await context.read<VerifyOtpProvider>().verifyOtpApi();
+                        final mobile = sendOtpProvider.mobileController.text; 
+                        final success = await verifyOtpProvider.verifyOtpApi(mobile);
                         if (success) {
+                          context.read<BottomNavigationProvider>().updateIndex(0);
                            context.read<VerifyOtpProvider>().clearOtp();
                           context.push(const BottomNavigationPage());
                         }

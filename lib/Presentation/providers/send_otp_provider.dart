@@ -29,7 +29,6 @@ class SendOtpProvider extends ChangeNotifier {
       final requestModel = SendOtpRequestModel(mobile: int.parse(mobile));
       final response = await sendOtpUseCase.execute(requestModel);
       if (response.success == 1) {
-        await Preferences.setMobileNumber(mobile);
         return true;
       } else {
         CustomLoader.errorMessage(response.message ?? "Failed to send OTP");

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
 import 'package:jiveda_appointment/widgets/custom_loader.dart';
+import 'package:provider/provider.dart';
 import '../../Data/model/request/verify_otp_request_model.dart';
 import '../../Domain/entities/verify_otp_entity.dart';
 import '../../Domain/usecases/verify_otp_usecase.dart';
@@ -22,14 +24,13 @@ class VerifyOtpProvider extends ChangeNotifier {
     return otpControllers.map((e) => e.text).join();
   }
 
-  Future<bool> verifyOtpApi() async {
+  Future<bool> verifyOtpApi(String mobile) async {
     try {
       isLoading = true;
       CustomLoader.showLoader("Verifying OTP...");
       notifyListeners();
-      final mobile = Preferences.getMobileNumber();
       final otp = getOtp();
-      final requestModel = VerifyOtpRequestModel(mobile: mobile ?? "", otp: otp);
+      final requestModel = VerifyOtpRequestModel(mobile: mobile, otp: otp);
       final response = await verifyOtpUseCase.execute(requestModel);
 
       if (response.success == 1) {
