@@ -7,35 +7,26 @@ import '../../Domain/usecases/send_otp_usecase.dart';
 import '../../utilities/color_data.dart';
 
 class SendOtpProvider extends ChangeNotifier {
-
   final SendOtpUseCase sendOtpUseCase;
 
   SendOtpProvider({required this.sendOtpUseCase});
 
   final TextEditingController mobileController = TextEditingController();
 
-  String mobileNumber = "";
-  bool isButtonEnabled = false;
   bool isLoading = false;
-
   SendOtpEntity? sendOtpEntity;
 
-  void updateButtonState(String value) {
-    mobileNumber = value;
-    isButtonEnabled = mobileNumber.length == 10;
-    notifyListeners();
-  }
+  bool get isButtonEnabled => mobileController.text.length == 10;
 
   Color get sendButtonColor => isButtonEnabled ? appColor : buttonBgGreyColor;
 
-   Future<SendOtpEntity?> sendOtpApi() async {
+  Future<SendOtpEntity?> sendOtpApi() async {
     try {
       isLoading = true;
       notifyListeners();
-      SendOtpRequestModel requestModel = SendOtpRequestModel(mobile: int.parse(mobileNumber));
+      final mobile = mobileController.text;
+      final requestModel = SendOtpRequestModel(mobile: int.parse(mobile));
       sendOtpEntity = await sendOtpUseCase.execute(requestModel);
-      debugPrint("OTP response success ${sendOtpEntity?.success}");
-      debugPrint("OTP response message ${sendOtpEntity?.message}");
       return sendOtpEntity;
     } catch (e) {
       debugPrint("SEND OTP error $e");
@@ -46,18 +37,37 @@ class SendOtpProvider extends ChangeNotifier {
     }
   }
 
-  void onSendOtp(VoidCallback pushOtpScreen) async {
-    if (!isButtonEnabled) return;
-    CustomLoader.showLoader("Sending OTP...");
-    final response = await sendOtpApi();
-    CustomLoader.closeLoader();
-    if (response != null && response.success == 1) {
-      await Preferences.setMobileNumber(mobileNumber);
-      debugPrint("OTP sent successfully");
-      pushOtpScreen();
-    } else {
-      debugPrint("OTP failed");
-      CustomLoader.errorMessage("Failed to send OTP");
+  Future<bool> onSendOtp() async {
+    if (!isButtonEnabled) {
+      CustomLoader.errorMessage("Enter valid mobile number");
+      return false;
     }
+    CustomLoader.showLoader("Sending OTP...");
+    try {
+      final response = await sendOtpApi();
+      if (response != null && response.success == 1) {
+        final mobile = mobileController.text;
+        await Preferences.setMobileNumber(mobile);
+        return true;
+      } else {
+        CustomLoader.errorMessage(response?.message ?? "Failed to send OTP");
+        return false;
+      }
+    } catch (e) {
+      CustomLoader.errorMessage("Something went wrong");
+      return false;
+    } finally {
+      CustomLoader.closeLoader();
+    }
+  }
+
+  void onMobileChanged() {
+  notifyListeners();
+}
+
+  @override
+  void dispose() {
+    mobileController.dispose();
+    super.dispose();
   }
 }

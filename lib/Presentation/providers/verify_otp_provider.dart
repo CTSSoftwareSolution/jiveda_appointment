@@ -1,9 +1,6 @@
-import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
 import 'package:jiveda_appointment/widgets/custom_loader.dart';
-import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
 import '../../Data/model/request/verify_otp_request_model.dart';
 import '../../Domain/entities/verify_otp_entity.dart';
 import '../../Domain/usecases/verify_otp_usecase.dart';
@@ -16,26 +13,27 @@ class VerifyOtpProvider extends ChangeNotifier {
   bool isLoading = false;
   VerifyOtpEntity? verifyOtpEntity;
 
-  final List<TextEditingController> otpControllers = List.generate(
-    6,
-    (index) => TextEditingController(),
-  );
+  final List<TextEditingController> otpControllers = List.generate(6, (_) => TextEditingController());
+
   String getOtp() {
     return otpControllers.map((e) => e.text).join();
   }
 
-  Future<VerifyOtpEntity?> verifyOtpApi({
-    required String mobile,
-    required String otp,
-  }) async {
+  Future<VerifyOtpEntity?> verifyOtpApi() async {
     try {
       isLoading = true;
       notifyListeners();
-      VerifyOtpRequestModel requestModel = VerifyOtpRequestModel(
-        mobile: mobile,
+
+      final mobile = Preferences.getMobileNumber();
+      final otp = getOtp();
+
+      final requestModel = VerifyOtpRequestModel(
+        mobile: mobile ?? "",
         otp: otp,
       );
+
       verifyOtpEntity = await verifyOtpUseCase.execute(requestModel);
+
       return verifyOtpEntity;
     } catch (e) {
       debugPrint("verify otp error: $e");
@@ -46,50 +44,46 @@ class VerifyOtpProvider extends ChangeNotifier {
     }
   }
 
-  void onVerifyOtp({
-    required VoidCallback onSuccess,
-    required SendOtpProvider sendOtpProvider,
-  }) async {
-    final mobile = sendOtpProvider.mobileNumber;
+  Future<bool> onVerifyOtp() async {
     final otp = getOtp();
 
     if (otp.length < 6) {
       CustomLoader.errorMessage("Please enter valid OTP");
-      return;
+      return false;
     }
-
     CustomLoader.showLoader("Verifying OTP...");
 
-    final response = await verifyOtpApi(mobile: mobile, otp: otp);
+    try {
+      final response = await verifyOtpApi();
 
-    CustomLoader.closeLoader();
+      if (response != null && response.success == 1) {
+        final user = response.data;
 
-    clearOtp();
-    FocusManager.instance.primaryFocus?.unfocus();
+        Preferences.setUserId(user?.userId ?? "");
+        Preferences.setUserName(user?.userName ?? "");
+        Preferences.setPatientId(user?.patientId ?? "");
+        Preferences.setEmail(user?.email ?? "");
+        Preferences.setMobile(user?.mobile ?? "");
+        Preferences.setFirstName(user?.firstName ?? "");
+        Preferences.setLastName(user?.lastName ?? "");
+        Preferences.setPatientName(user?.userName ?? "");
+        Preferences.setTokenId(user?.tokenId ?? "");
+        Preferences.setRoleId(user?.roleId ?? "");
+        Preferences.setOrgName(user?.orgName ?? "");
+        Preferences.setOrgServiceProviderId(user?.orgServiceProviderId ?? "");
 
-    if (response != null && response.success == 1) {
-      final user = response.data;
-
-      Preferences.setUserId(user?.userId ?? "");
-      Preferences.setUserName(user?.userName ?? "");
-      Preferences.setPatientId(user?.patientId ?? "");
-      Preferences.setEmail(user?.email ?? "");
-      Preferences.setMobile(user?.mobile ?? "");
-      Preferences.setFirstName(user?.firstName ?? "");
-      Preferences.setLastName(user?.lastName ?? "");
-      Preferences.setPatientName(user?.userName ?? ""); 
-      Preferences.setTokenId(user?.tokenId ?? "");
-      Preferences.setRoleId(user?.roleId ?? "");
-      Preferences.setOrgName(user?.orgName ?? "");
-      Preferences.setOrgServiceProviderId(user?.orgServiceProviderId ?? "");
-
-      debugPrint("Preferences set:");
-      debugPrint("UserId: ${Preferences.getUserId()}");
-      debugPrint("UserName: ${Preferences.getUserName()}");
-
-      onSuccess();
-    } else {
-      CustomLoader.errorMessage(response?.message ?? "Invalid OTP");
+        return true;
+      } else {
+        CustomLoader.errorMessage(response?.message ?? "Invalid OTP");
+        return false;
+      }
+    } catch (e) {
+      CustomLoader.errorMessage("Something went wrong");
+      return false;
+    } finally {
+      CustomLoader.closeLoader();
+      clearOtp();
+      FocusManager.instance.primaryFocus?.unfocus();
     }
   }
 

@@ -98,10 +98,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             await Preferences.clear();
                             final sendOtpProvider = context.read<SendOtpProvider>();
                               sendOtpProvider.mobileController.clear();
-                              sendOtpProvider.mobileNumber = "";
-                              sendOtpProvider.isButtonEnabled = false;
                               sendOtpProvider.notifyListeners();
-                            context.push(LoginScreen());
+                              context.push(LoginScreen());
                           },
                           onNo: () {
                             Navigator.of(context).pop();

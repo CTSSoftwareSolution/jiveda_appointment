@@ -23,8 +23,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  bool isButtonEnabled = false;
-
   @override
   Widget build(BuildContext context) {
     final Color scaffoldBgColor = Theme.of(context).scaffoldBackgroundColor;
@@ -67,7 +65,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         10.height,
                         const CustomText(
-                          text: "We will send you one time OTP on\nthis mobile number",
+                          text:
+                              "We will send you one time OTP on\nthis mobile number",
                           fontSize: 15,
                           textColor: blackColor,
                           fontWeight: FontWeight.w400,
@@ -83,31 +82,27 @@ class _LoginScreenState extends State<LoginScreen> {
                             textCapitalization: TextCapitalization.none,
                             fillColor: scaffoldBgColor,
                             inputFormatters: InputFormatters.mobileNumber,
-                            validator: (value) =>
-                                Validators.mobileValidation(value!, context),
+                            validator: (value) => Validators.mobileValidation(value!, context),
                             hintStyle: const TextStyle(
                               color: textHintColor,
                               fontSize: 14,
                             ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                             onChanged: (value) {
-                              context.read<SendOtpProvider>().updateButtonState(
-                                value,
-                              );
-                            },
+                               context.read<SendOtpProvider>().onMobileChanged();
+                              },
                           ),
                         ),
                         35.height,
                         CustomButton(
                           buttonText: "SEND OTP",
-                          onPress: () {
+                          onPress: () async {
                             if (sendOtpProvider.isLoading) return;
                             if (formKey.currentState!.validate()) {
-                              sendOtpProvider.onSendOtp(() {
+                              final success = await context.read<SendOtpProvider>().onSendOtp();
+                              if (success) {
                                 context.push(const OtpVerificationScreen());
-                              });
+                              }
                             }
                           },
                           backgroundColor: buttonColor,

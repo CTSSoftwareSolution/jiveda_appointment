@@ -33,7 +33,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final mobileNumber = context.watch<SendOtpProvider>().mobileNumber;
+    final mobileNumber = context.watch<SendOtpProvider>().mobileController.text;
     final verifyOtpProvider = context.read<VerifyOtpProvider>();
     final sendOtpProvider = context.read<SendOtpProvider>();
     final otpSeconds = secondsRemaining;
@@ -92,17 +92,17 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       ),
                     ),
                     35.height,
-                    OtpFieldRow(
-                      controllers: verifyOtpProvider.otpControllers,
-                    ),
+                    OtpFieldRow(controllers: verifyOtpProvider.otpControllers),
                     20.height,
                     Center(
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           if (otpSeconds == 0) {
-                            sendOtpProvider.onSendOtp(() {});
-                            startTimer(() {});
-                            verifyOtpProvider.clearOtp();
+                            final success = await sendOtpProvider.onSendOtp();
+                            if (success) {
+                              startTimer(() {});
+                              verifyOtpProvider.clearOtp();
+                            }
                           }
                         },
                         child: CustomText(
@@ -119,13 +119,11 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       height: 50,
                       width: double.infinity,
                       buttonText: "VERIFY",
-                      onPress: () {
-                        verifyOtpProvider.onVerifyOtp(
-                          sendOtpProvider: sendOtpProvider,
-                          onSuccess: () {
-                            context.push(const BottomNavigationPage());
-                          },
-                        );
+                      onPress: () async {
+                        final success = await context.read<VerifyOtpProvider>().onVerifyOtp();
+                        if (success) {
+                          context.push(const BottomNavigationPage());
+                        }
                       },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,
