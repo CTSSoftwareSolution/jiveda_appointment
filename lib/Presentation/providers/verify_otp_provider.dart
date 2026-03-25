@@ -20,17 +20,14 @@ class VerifyOtpProvider extends ChangeNotifier {
   
   String otp = "";
 
-  Future<void> verifyOtpApi(BuildContext context) async {
+  Future<VerifyOtpEntity?> verifyOtpApi(BuildContext context) async {
   try {
     isLoading = true;
     CustomLoader.showLoader("Verifying OTP...");
     notifyListeners();
 
     final sendOtpProvider = Provider.of<SendOtpProvider>(context, listen: false);
-    final requestModel = VerifyOtpRequestModel(
-      mobile: sendOtpProvider.mobileController.text,
-      otp: otp,
-    );
+    final requestModel = VerifyOtpRequestModel(mobile: sendOtpProvider.mobileController.text,otp: otp,);
 
     final response = await verifyOtpUseCase.execute(requestModel);
     verifyOtpEntity = response;
@@ -56,20 +53,23 @@ class VerifyOtpProvider extends ChangeNotifier {
       otp = "";
       bottomNavProvider.updateIndex(0);
       context.push(BottomNavigationPage());
-
     } else {
       CustomLoader.errorMessage(response.message ?? "Invalid OTP");
     }
+
+    return response; 
   } catch (e) {
     debugPrint("verify otp error: $e");
     CustomLoader.errorMessage("Something went wrong");
+    return null;
   } finally {
     isLoading = false;
     CustomLoader.closeLoader();
     FocusManager.instance.primaryFocus?.unfocus();
     notifyListeners();
   }
-}
+  
+  }
 
   void clearOtp() {
   otp = "";

@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           buttonText: "SEND OTP",
                           onPress: () {
                             if (!isEnabled || sendOtpProvider.isLoading) return;
-                                 sendOtpProvider.sendOtp(context);
+                                 sendOtpProvider.sendOtpApi(context);
                                },
                           backgroundColor: buttonColor,
                           foregroundColor: whiteColor,

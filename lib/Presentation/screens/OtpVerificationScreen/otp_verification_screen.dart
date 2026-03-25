@@ -149,7 +149,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       child: GestureDetector(
                         onTap: () async {
                           if (otpSeconds == 0) {
-                             await sendOtpProvider.sendOtpApi();
+                             await sendOtpProvider.sendOtpApi(context);
                               startTimer(() {});
                               verifyOtpProvider.otp = "";
                           }
