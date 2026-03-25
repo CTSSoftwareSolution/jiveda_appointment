@@ -1,6 +1,7 @@
 import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jiveda_appointment/Presentation/screens/OtpVerificationScreen/otp_verification_screen.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/utilities/extension.dart';
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      SystemNavigator.pop();
                     },
                     child: const Icon(Icons.close, size: 24, color: greyColor),
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:jiveda_appointment/Core/network/services.dart';
 import 'package:jiveda_appointment/Presentation/screens/splash/splash_screen.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import 'Presentation/providers/multi_provider.dart';
 
@@ -10,7 +11,11 @@ import 'Presentation/providers/multi_provider.dart';
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MultipleProvider());
+  runApp(
+    OverlaySupport.global(
+      child: const MultipleProvider(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

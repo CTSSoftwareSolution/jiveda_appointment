@@ -99,6 +99,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                     Pinput(
                       length: 6,
                       autofocus: true,
+                      autofillHints: const [],
                       defaultPinTheme: PinTheme(
                         width: 50,
                         height: 48,

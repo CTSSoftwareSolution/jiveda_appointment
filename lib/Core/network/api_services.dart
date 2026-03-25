@@ -11,6 +11,7 @@ class ApiService {
       debugPrint("request ${jsonEncode(body.toJson())}");
       final response = await http.post(Uri.parse(url), headers: authHeader, body: jsonEncode(body.toJson()),);
       if (kDebugMode) {
+        debugPrint("Alice called");
         alice.onHttpResponse(response, body: jsonEncode(body.toJson()));
       }
       return jsonDecode(response.body);
