@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
-import 'package:jiveda_appointment/Presentation/screens/login/login_screen.dart';
+import 'package:jiveda_appointment/Core/network/services.dart';
 import 'package:jiveda_appointment/Presentation/screens/splash/splash_screen.dart';
-import 'package:jiveda_appointment/utilities/preferences.dart';
 
 import 'Presentation/providers/multi_provider.dart';
 
@@ -25,6 +23,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       builder: EasyLoading.init(),
+      navigatorKey: alice.getNavigatorKey(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
