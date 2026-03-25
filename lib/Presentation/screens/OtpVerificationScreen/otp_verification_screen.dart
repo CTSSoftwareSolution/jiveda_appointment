@@ -31,14 +31,8 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final verifyOtpProvider = Provider.of<VerifyOtpProvider>(
-      context,
-      listen: false,
-    );
-    final sendOtpProvider = Provider.of<SendOtpProvider>(
-      context,
-      listen: false,
-    );
+    final verifyOtpProvider = Provider.of<VerifyOtpProvider>(context,listen: false,);
+    final sendOtpProvider = Provider.of<SendOtpProvider>(context,listen: false,);
     final mobileNumber = sendOtpProvider.mobileController.text;
     final otpSeconds = secondsRemaining;
 
@@ -155,11 +149,9 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       child: GestureDetector(
                         onTap: () async {
                           if (otpSeconds == 0) {
-                            final response = await sendOtpProvider.sendOtpApi();
-                            if (response?.success == 1) {
+                             await sendOtpProvider.sendOtpApi();
                               startTimer(() {});
                               verifyOtpProvider.otp = "";
-                            }
                           }
                         },
                         child: CustomText(
@@ -177,7 +169,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       width: double.infinity,
                       buttonText: "VERIFY",
                       onPress: () {
-                        verifyOtpProvider.verifyOtp(context);
+                        verifyOtpProvider.verifyOtpApi(context);
                       },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,
