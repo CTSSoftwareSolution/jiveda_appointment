@@ -27,9 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final Color scaffoldBgColor = Theme.of(context).scaffoldBackgroundColor;
     final screenWidth = MediaQuery.of(context).size.width;
-    final sendOtpProvider = context.read<SendOtpProvider>();
-    final buttonColor = context.watch<SendOtpProvider>().sendButtonColor;
-    final isEnabled = context.watch<SendOtpProvider>().isButtonEnabled;
+    final provider = context.watch<SendOtpProvider>();
+    final sendOtpProvider = provider;
+    final buttonColor = provider.sendButtonColor;
+    final isEnabled = provider.isButtonEnabled;
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -99,15 +100,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         35.height,
                         CustomButton(
                           buttonText: "SEND OTP",
-                          onPress: () async {
+                          onPress: () {
                             if (!isEnabled || sendOtpProvider.isLoading) return;
-                            final success = await context
-                                .read<SendOtpProvider>()
-                                .sendOtpApi();
-                            if (success) {
-                              context.push(const OtpVerificationScreen());
-                            }
-                          },
+                                 sendOtpProvider.sendOtp(context);
+                               },
                           backgroundColor: buttonColor,
                           foregroundColor: whiteColor,
                           shape: RoundedRectangleBorder(
