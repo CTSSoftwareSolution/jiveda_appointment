@@ -101,9 +101,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         35.height,
                         CustomButton(
                           buttonText: "SEND OTP",
-                          onPress: () {
+                          onPress: () async{
                             if (!isEnabled || sendOtpProvider.isLoading) return;
-                                 sendOtpProvider.sendOtpApi(context);
+                               final response = await sendOtpProvider.sendOtpApi();
+                                if (response?.success == 1) {
+                                    context.push(const OtpVerificationScreen());
+                                  }
                                },
                           backgroundColor: buttonColor,
                           foregroundColor: whiteColor,

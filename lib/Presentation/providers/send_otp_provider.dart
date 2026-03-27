@@ -22,7 +22,7 @@ class SendOtpProvider extends ChangeNotifier {
 
   Color get sendButtonColor => isButtonEnabled ? appColor : buttonBgGreyColor;
 
-Future<SendOtpEntity?> sendOtpApi(BuildContext context) async {
+Future<SendOtpEntity?> sendOtpApi() async {
   try {
     isLoading = true;
     CustomLoader.showLoader("Sending OTP...");
@@ -31,27 +31,21 @@ Future<SendOtpEntity?> sendOtpApi(BuildContext context) async {
     final mobile = mobileController.text;
     final requestModel = SendOtpRequestModel(mobile: int.parse(mobile));
     final response = await sendOtpUseCase.execute(requestModel);
+
     sendOtpEntity = response;
 
-    if (response.success == 1) {
-      if (context.mounted) {
-        context.push(const OtpVerificationScreen());
-      }
-    } else {
-      CustomLoader.errorMessage(response.message ?? "Failed to send OTP");
-    }
     return response; 
+
   } catch (e) {
     debugPrint("SEND OTP error $e");
     CustomLoader.errorMessage("Something went wrong");
     return null;
   } finally {
     isLoading = false;
-    CustomLoader.closeLoader();
+    CustomLoader.closeLoader(); 
     notifyListeners();
   }
 }
-
   void onMobileChanged() {
     notifyListeners();
   }

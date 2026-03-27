@@ -1,8 +1,6 @@
 import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/material.dart';
-import 'package:jiveda_appointment/Presentation/providers/bottom_navigation_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
-import 'package:jiveda_appointment/Presentation/screens/bottom_navigation/bottom_navigation_screen.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
 import 'package:jiveda_appointment/widgets/custom_loader.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +31,6 @@ class VerifyOtpProvider extends ChangeNotifier {
     verifyOtpEntity = response;
 
     if (response.success == 1) {
-      final bottomNavProvider = Provider.of<BottomNavigationProvider>(context, listen: false);
       final user = response.data;
 
       await Preferences.setPreferences();
@@ -51,8 +48,6 @@ class VerifyOtpProvider extends ChangeNotifier {
       Preferences.setOrgServiceProviderId(user?.orgServiceProviderId ?? "");
 
       otp = "";
-      bottomNavProvider.updateIndex(0);
-      context.push(BottomNavigationPage());
     } else {
       CustomLoader.errorMessage(response.message ?? "Invalid OTP");
     }

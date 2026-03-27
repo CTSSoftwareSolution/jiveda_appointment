@@ -7,6 +7,7 @@ import 'package:jiveda_appointment/utilities/image_data.dart';
 import 'package:jiveda_appointment/widgets/logout_dialog.dart';
 import 'package:jiveda_appointment/widgets/profile_menu_item.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/custom_text.dart';
 
@@ -18,6 +19,21 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  String version = "";
+
+  @override
+  void initState() {
+    super.initState();
+    getVersion(); 
+  }
+
+  Future<void> getVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      version = "Version: ${info.version}"; 
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         barrierDismissible: false,
                         builder: (context) => LogoutDialog(
                           onYes: () async {
-                            Navigator.of(context).pop();
+                            context.pop();
                             await Preferences.clear();
                             final sendOtpProvider = context.read<SendOtpProvider>();
                               sendOtpProvider.mobileController.clear();
@@ -102,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               context.push(LoginScreen());
                           },
                           onNo: () {
-                            Navigator.of(context).pop();
+                            context.pop();
                           },
                         ),
                       );
@@ -120,8 +136,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.symmetric(vertical: 12),
             alignment: Alignment.center,
             color: surfaceColor,
-            child: const CustomText(
-              text: "Version: 1.1.130",
+            child: CustomText(
+              text: version,
               textColor: blackColor,
               fontSize: 14,
             ),

@@ -1,7 +1,11 @@
+import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/bottom_navigation_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/verify_otp_provider.dart';
+import 'package:jiveda_appointment/Presentation/screens/bottom_navigation/bottom_navigation_screen.dart';
+import 'package:jiveda_appointment/widgets/otp_input_field.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:jiveda_appointment/widgets/custom_button.dart';
@@ -32,6 +36,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final verifyOtpProvider = Provider.of<VerifyOtpProvider>(context,listen: false,);
+    final bottomNavProvider = Provider.of<BottomNavigationProvider>(context, listen: false);
     final sendOtpProvider = Provider.of<SendOtpProvider>(context,listen: false,);
     final mobileNumber = sendOtpProvider.mobileController.text;
     final otpSeconds = secondsRemaining;
@@ -46,7 +51,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
               padding: EdgeInsets.only(left: screenWidth * 0.04),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  context.pop();
                   verifyOtpProvider.clearOtp();
                 },
                 child: const Icon(Icons.arrow_back, size: 24, color: greyColor),
@@ -83,73 +88,24 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                             style: const TextStyle(color: greenColor),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.pop(context);
+                                context.pop();
                               },
                           ),
                         ],
                       ),
                     ),
                     35.height,
-                    Pinput(
-                      length: 6,
-                      autofocus: true,
-                      autofillHints: const [],
-                      defaultPinTheme: PinTheme(
-                        width: 50,
-                        height: 48,
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: blackColor,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(
-                            6,
-                          ), 
-                        ),
-                      ),
-
-                      focusedPinTheme: PinTheme(
-                        width: 50,
-                        height: 48,
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: blackColor,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: appColor,
-                            width: 1.5,
-                          ), 
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
-                      submittedPinTheme: PinTheme(
-                        width: 50,
-                        height: 48,
-                        textStyle: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: blackColor,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade400),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
-                      cursor: Container(width: 2, height: 20, color: blackColor,),
-                      onChanged: (value) {
-                        verifyOtpProvider.otp = value;
-                      },
+                    OtpInputField(
+                       onChanged: (value) {
+                         verifyOtpProvider.otp = value;
+                       },
                     ),
                     20.height,
                     Center(
                       child: GestureDetector(
                         onTap: () async {
                           if (otpSeconds == 0) {
-                             await sendOtpProvider.sendOtpApi(context);
+                             await sendOtpProvider.sendOtpApi();
                               startTimer(() {});
                               verifyOtpProvider.otp = "";
                           }
@@ -170,6 +126,8 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       buttonText: "VERIFY",
                       onPress: () {
                         verifyOtpProvider.verifyOtpApi(context);
+                        bottomNavProvider.updateIndex(0);
+                        context.push(BottomNavigationPage());
                       },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,
