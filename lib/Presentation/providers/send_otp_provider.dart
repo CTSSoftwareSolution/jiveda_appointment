@@ -30,11 +30,9 @@ Future<SendOtpEntity?> sendOtpApi() async {
 
     final mobile = mobileController.text;
     final requestModel = SendOtpRequestModel(mobile: int.parse(mobile));
-    final response = await sendOtpUseCase.execute(requestModel);
 
-    sendOtpEntity = response;
-
-    return response; 
+    sendOtpEntity = await sendOtpUseCase.execute(requestModel); 
+    return sendOtpEntity;
 
   } catch (e) {
     debugPrint("SEND OTP error $e");
@@ -42,7 +40,7 @@ Future<SendOtpEntity?> sendOtpApi() async {
     return null;
   } finally {
     isLoading = false;
-    CustomLoader.closeLoader(); 
+    CustomLoader.closeLoader();
     notifyListeners();
   }
 }

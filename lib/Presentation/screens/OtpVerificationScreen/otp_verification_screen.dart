@@ -27,7 +27,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final verifyOtpProvider = context.read<VerifyOtpProvider>();
-      verifyOtpProvider.clearOtp();
+      verifyOtpProvider.otpController.clear();
       startTimer(() {});
     });
   }
@@ -52,7 +52,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
               child: GestureDetector(
                 onTap: () {
                   context.pop();
-                  verifyOtpProvider.clearOtp();
+                  verifyOtpProvider.otpController.clear();
                 },
                 child: const Icon(Icons.arrow_back, size: 24, color: greyColor),
               ),
@@ -96,9 +96,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                     ),
                     35.height,
                     OtpInputField(
-                       onChanged: (value) {
-                         verifyOtpProvider.otp = value;
-                       },
+                      controller: verifyOtpProvider.otpController,
                     ),
                     20.height,
                     Center(
@@ -107,7 +105,7 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                           if (otpSeconds == 0) {
                              await sendOtpProvider.sendOtpApi();
                               startTimer(() {});
-                              verifyOtpProvider.otp = "";
+                              verifyOtpProvider.otpController.clear();
                           }
                         },
                         child: CustomText(

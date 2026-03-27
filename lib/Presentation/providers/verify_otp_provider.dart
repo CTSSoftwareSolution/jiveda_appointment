@@ -16,7 +16,7 @@ class VerifyOtpProvider extends ChangeNotifier {
   bool isLoading = false;
   VerifyOtpEntity? verifyOtpEntity;
   
-  String otp = "";
+  final TextEditingController otpController = TextEditingController();
 
   Future<VerifyOtpEntity?> verifyOtpApi(BuildContext context) async {
   try {
@@ -25,7 +25,7 @@ class VerifyOtpProvider extends ChangeNotifier {
     notifyListeners();
 
     final sendOtpProvider = Provider.of<SendOtpProvider>(context, listen: false);
-    final requestModel = VerifyOtpRequestModel(mobile: sendOtpProvider.mobileController.text,otp: otp,);
+    final requestModel = VerifyOtpRequestModel(mobile: sendOtpProvider.mobileController.text,otp: otpController.text,);
 
     final response = await verifyOtpUseCase.execute(requestModel);
     verifyOtpEntity = response;
@@ -46,8 +46,6 @@ class VerifyOtpProvider extends ChangeNotifier {
       Preferences.setRoleId(user?.roleId ?? "");
       Preferences.setOrgName(user?.orgName ?? "");
       Preferences.setOrgServiceProviderId(user?.orgServiceProviderId ?? "");
-
-      otp = "";
     } else {
       CustomLoader.errorMessage(response.message ?? "Invalid OTP");
     }
@@ -65,10 +63,5 @@ class VerifyOtpProvider extends ChangeNotifier {
   }
   
   }
-
-  void clearOtp() {
-  otp = "";
-  notifyListeners();
-}
 
 }

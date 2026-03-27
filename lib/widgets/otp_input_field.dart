@@ -3,16 +3,19 @@ import 'package:pinput/pinput.dart';
 import '../utilities/color_data.dart';
 
 class OtpInputField extends StatelessWidget {
-  final Function(String) onChanged;
+  final TextEditingController controller;
 
-  const OtpInputField({super.key, required this.onChanged});
+  const OtpInputField({
+    super.key,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Pinput(
+      controller: controller,
       length: 6,
       autofocus: true,
-      onChanged: onChanged,
 
       defaultPinTheme: PinTheme(
         width: 50,
