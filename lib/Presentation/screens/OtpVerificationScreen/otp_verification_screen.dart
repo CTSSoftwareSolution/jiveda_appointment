@@ -5,6 +5,7 @@ import 'package:jiveda_appointment/Presentation/providers/bottom_navigation_prov
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/verify_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/screens/bottom_navigation/bottom_navigation_screen.dart';
+import 'package:jiveda_appointment/widgets/custom_loader.dart';
 import 'package:jiveda_appointment/widgets/otp_input_field.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -122,9 +123,16 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       height: 50,
                       width: double.infinity,
                       buttonText: "VERIFY",
-                      onPress: () {
-                       verifyOtpProvider.verifyOtp(context);
-                      },
+                      onPress: () async {
+                        final response = await verifyOtpProvider.verifyOtpApi(context);
+                        if (response?.success == 1) {
+                          verifyOtpProvider.otpController.clear();
+                          bottomNavProvider.updateIndex(0);
+                          context.push(BottomNavigationPage());
+                          } else {
+                            CustomLoader.errorMessage(response?.message ?? "Invalid OTP");
+                            }
+                          },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(

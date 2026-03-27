@@ -25,6 +25,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
+void initState() {
+  super.initState();
+  final provider = context.read<SendOtpProvider>();
+  provider.mobileController.addListener(() {
+    provider.notifyListeners();
+  });
+}
+
+  @override
   Widget build(BuildContext context) {
     final Color scaffoldBgColor = Theme.of(context).scaffoldBackgroundColor;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -93,9 +102,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 12,
                             ),
-                            onChanged: (value) {
-                              context.read<SendOtpProvider>().onMobileChanged();
-                            },
                           ),
                         ),
                         35.height,

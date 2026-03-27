@@ -44,9 +44,6 @@ Future<SendOtpEntity?> sendOtpApi() async {
     notifyListeners();
   }
 }
-  void onMobileChanged() {
-    notifyListeners();
-  }
 
   @override
   void dispose() {
