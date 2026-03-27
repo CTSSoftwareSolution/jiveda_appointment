@@ -122,13 +122,8 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       height: 50,
                       width: double.infinity,
                       buttonText: "VERIFY",
-                      onPress: () async{
-                       final response = await verifyOtpProvider.verifyOtpApi(context);
-                       if(response?.success == 1){
-                         bottomNavProvider.updateIndex(0);
-                        context.push(BottomNavigationPage());
-                       }
-                       
+                      onPress: () {
+                       verifyOtpProvider.verifyOtp(context);
                       },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,
