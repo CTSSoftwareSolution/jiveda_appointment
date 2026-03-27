@@ -53,7 +53,6 @@ class VerifyOtpProvider extends ChangeNotifier {
   } finally {
     isLoading = false;
     CustomLoader.closeLoader();
-    FocusManager.instance.primaryFocus?.unfocus();
     notifyListeners();
   }
   
