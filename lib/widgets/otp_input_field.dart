@@ -16,6 +16,7 @@ class OtpInputField extends StatelessWidget {
       controller: controller,
       length: 6,
       autofocus: true,
+      autofillHints: const [],
 
       defaultPinTheme: PinTheme(
         width: 50,

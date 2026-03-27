@@ -27,11 +27,9 @@ class VerifyOtpProvider extends ChangeNotifier {
     final sendOtpProvider = Provider.of<SendOtpProvider>(context, listen: false);
     final requestModel = VerifyOtpRequestModel(mobile: sendOtpProvider.mobileController.text,otp: otpController.text,);
 
-    final response = await verifyOtpUseCase.execute(requestModel);
-    verifyOtpEntity = response;
+    final verifyOtpEntity = await verifyOtpUseCase.execute(requestModel);
 
-    if (response.success == 1) {
-      final user = response.data;
+      final user = verifyOtpEntity.data;
 
       await Preferences.setPreferences();
       Preferences.setUserId(user?.userId ?? "");
@@ -46,11 +44,8 @@ class VerifyOtpProvider extends ChangeNotifier {
       Preferences.setRoleId(user?.roleId ?? "");
       Preferences.setOrgName(user?.orgName ?? "");
       Preferences.setOrgServiceProviderId(user?.orgServiceProviderId ?? "");
-    } else {
-      CustomLoader.errorMessage(response.message ?? "Invalid OTP");
-    }
 
-    return response; 
+    return verifyOtpEntity; 
   } catch (e) {
     debugPrint("verify otp error: $e");
     CustomLoader.errorMessage("Something went wrong");
