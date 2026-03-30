@@ -47,7 +47,6 @@ class VerifyOtpProvider extends ChangeNotifier {
     return verifyOtpEntity; 
   } catch (e) {
     debugPrint("verify otp error: $e");
-    CustomLoader.errorMessage("Something went wrong");
     return null;
   } finally {
     isLoading = false;
