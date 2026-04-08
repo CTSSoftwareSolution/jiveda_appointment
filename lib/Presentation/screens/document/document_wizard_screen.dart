@@ -32,7 +32,9 @@ class _DocumentWizardScreenState extends State<DocumentWizardScreen>
       begin: 0,
       end: 1,
     ).animate(docProvider.animCtrl);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
     docProvider.updateProgress();
+  });
   }
 
   @override

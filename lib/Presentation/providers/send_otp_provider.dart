@@ -32,11 +32,14 @@ Future<SendOtpEntity?> sendOtpApi() async {
     final requestModel = SendOtpRequestModel(mobile: int.parse(mobile));
 
     sendOtpEntity = await sendOtpUseCase.execute(requestModel); 
+     if (sendOtpEntity != null && sendOtpEntity!.success == 0) {
+      CustomLoader.errorMessage(sendOtpEntity!.message ?? "Something went wrong");
+      return null;
+    }
     return sendOtpEntity;
 
   } catch (e) {
     debugPrint("SEND OTP error $e");
-    CustomLoader.errorMessage("Something went wrong");
     return null;
   } finally {
     isLoading = false;

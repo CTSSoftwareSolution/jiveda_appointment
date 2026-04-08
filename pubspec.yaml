@@ -40,6 +40,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   shared_preferences: ^2.2.2
   image_picker: ^1.0.4
+  file_picker: ^11.0.1
   intl: ^0.20.2
   pinput: ^6.0.2
   flutter_alice: ^2.0.1
