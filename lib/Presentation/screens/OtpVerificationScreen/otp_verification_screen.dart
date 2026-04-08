@@ -1,10 +1,13 @@
 import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:jiveda_appointment/Presentation/providers/bottom_navigation_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/verify_otp_provider.dart';
-import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
-import 'package:jiveda_appointment/utilities/otp_fields.dart';
+import 'package:jiveda_appointment/Presentation/screens/bottom_navigation/bottom_navigation_screen.dart';
+import 'package:jiveda_appointment/widgets/custom_loader.dart';
+import 'package:jiveda_appointment/widgets/otp_input_field.dart';
+import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:jiveda_appointment/widgets/custom_button.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
@@ -20,24 +23,23 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class OtpVerificationScreenState extends State<OtpVerificationScreen>
     with TimerMixin {
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final verifyOtpProvider = context.read<VerifyOtpProvider>();
-      startTimer(() {}); 
-      FocusScope.of(context).requestFocus(verifyOtpProvider.focusNodes[0],);
+      verifyOtpProvider.otpController.clear();
+      startTimer(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     final screenWidth = MediaQuery.of(context).size.width;
-    final mobileNumber = context.watch<SendOtpProvider>().mobileNumber;
-    final verifyOtpProvider = context.read<VerifyOtpProvider>();
-    final sendOtpProvider = context.read<SendOtpProvider>();
+    final verifyOtpProvider = Provider.of<VerifyOtpProvider>(context,listen: false,);
+    final bottomNavProvider = Provider.of<BottomNavigationProvider>(context, listen: false);
+    final sendOtpProvider = Provider.of<SendOtpProvider>(context,listen: false,);
+    final mobileNumber = sendOtpProvider.mobileController.text;
     final otpSeconds = secondsRemaining;
 
     return Scaffold(
@@ -50,8 +52,8 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
               padding: EdgeInsets.only(left: screenWidth * 0.04),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
-                  verifyOtpProvider.clearOtp();
+                  context.pop();
+                  verifyOtpProvider.otpController.clear();
                 },
                 child: const Icon(Icons.arrow_back, size: 24, color: greyColor),
               ),
@@ -87,25 +89,24 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                             style: const TextStyle(color: greenColor),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.pop(context);
+                                context.pop();
                               },
                           ),
                         ],
                       ),
                     ),
                     35.height,
-                    OtpFieldRow(
-                      controllers: verifyOtpProvider.otpControllers,
-                      focusNodes: verifyOtpProvider.focusNodes,
+                    OtpInputField(
+                      controller: verifyOtpProvider.otpController,
                     ),
                     20.height,
                     Center(
                       child: GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           if (otpSeconds == 0) {
-                            sendOtpProvider.onSendOtp(() {});
-                            startTimer(() {}); 
-                            verifyOtpProvider.clearOtp();
+                             await sendOtpProvider.sendOtpApi();
+                              startTimer(() {});
+                              verifyOtpProvider.otpController.clear();
                           }
                         },
                         child: CustomText(
@@ -122,14 +123,16 @@ class OtpVerificationScreenState extends State<OtpVerificationScreen>
                       height: 50,
                       width: double.infinity,
                       buttonText: "VERIFY",
-                      onPress: () {
-                        verifyOtpProvider.onVerifyOtp(
-                          sendOtpProvider: sendOtpProvider,
-                          onSuccess: () {
-                            context.push(const AppointmentScreen());
+                      onPress: () async {
+                        final response = await verifyOtpProvider.verifyOtpApi(context);
+                        if (response?.success == 1) {
+                          verifyOtpProvider.otpController.clear();
+                          bottomNavProvider.updateIndex(0);
+                          context.push(BottomNavigationPage());
+                          } else {
+                            CustomLoader.errorMessage(response?.message ?? "Invalid OTP");
+                            }
                           },
-                        );
-                      },
                       backgroundColor: appColor,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(

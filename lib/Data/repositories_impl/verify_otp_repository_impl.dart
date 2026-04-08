@@ -11,12 +11,15 @@ class VerifyOtpRepositoryImpl implements VerifyOtpRepository {
   Future<VerifyOtpEntity> verifyOtpApi(VerifyOtpRequestModel verifyOtpRequestModel) async {
     try {
       final response = await ApiService.post(verifyOtpRequestModel, verifyOtpUrl);
+
       final model = VerifyOtpResponseModel.fromJson(response);
-      return VerifyOtpEntity(
+
+      return VerifyOtpResponseModel(
         success: model.success,
         message: model.message,
         data: model.data,
       );
+
     } catch (e) {
       throw Exception(e);
     }

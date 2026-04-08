@@ -18,6 +18,7 @@ class AppointmentScreen extends StatefulWidget {
 
 class _AppointmentScreenState extends State<AppointmentScreen> with TickerProviderStateMixin {
 
+  AppointmentListProvider? listProvider;
 
   @override
   void initState() {
@@ -36,9 +37,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
 
   @override
   void dispose() {
-    final listProvider = Provider.of<AppointmentListProvider>(context,listen: false);
-    listProvider.tabController.dispose();
-    listProvider.searchCtrl.dispose();
+    // final listProvider = Provider.of<AppointmentListProvider>(context,listen: false);
+    listProvider?.tabController.dispose();
+    listProvider?.searchCtrl.dispose();
     super.dispose();
   }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:jiveda_appointment/Presentation/screens/appointment/appointment_screen.dart';
-import 'package:jiveda_appointment/Presentation/screens/login/login_screen.dart';
-import 'package:jiveda_appointment/utilities/preferences.dart';
+import 'package:jiveda_appointment/Core/network/services.dart';
+import 'package:jiveda_appointment/Presentation/screens/splash/splash_screen.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import 'Presentation/providers/multi_provider.dart';
 
@@ -11,8 +11,11 @@ import 'Presentation/providers/multi_provider.dart';
 
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
-  await Preferences.setPreferences();
-  runApp(const MultipleProvider());
+  runApp(
+    OverlaySupport.global(
+      child: const MultipleProvider(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,10 +28,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       builder: EasyLoading.init(),
+      navigatorKey: alice.getNavigatorKey(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: LoginScreen()
+      // home: AppointmentScreen()
+      home: SplashScreen()
     );
   }
 }

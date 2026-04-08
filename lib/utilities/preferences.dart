@@ -15,10 +15,14 @@ class Preferences {
   static String patientName = "patientName";
   static String tokenId = "tokenId";
   static String roleId = "roleId";
+  static String orgName = "orgName";
+  static String orgServiceProviderId = "orgServiceProviderId";
 
   static Future<void> setPreferences() async {
     instance = await SharedPreferences.getInstance();
   }
+
+  static Future<bool> clear() => instance!.clear();
 
   static Future<bool> setString(String key, String value) {
     return instance!.setString(key, value);
@@ -39,16 +43,20 @@ class Preferences {
   static Future<bool> setPatientName(String value) => setString(patientName, value);
   static Future<bool> setTokenId(String value) => setString(tokenId, value);
   static Future<bool> setRoleId(String value) => setString(roleId, value);
+  static Future<bool> setOrgName(String value) => setString(orgName, value);
+  static Future<bool> setOrgServiceProviderId(String value) => setString(orgServiceProviderId, value);
 
   static dynamic getMobileNumber() => getString(mobileNumber);
-  static String getUserId() => getString(userId);
-  static String getUserName() => getString(userName);
-  static String getPatientId() => getString(patientId);
-  static String getEmail() => getString(email);
-  static String getMobile() => getString(mobile);
-  static String getFirstName() => getString(firstName);
-  static String getLastName() => getString(lastName);
-  static String getPatientName() => getString(patientName);
-  static String getTokenId() => getString(tokenId);
-  static String getRoleId() => getString(roleId);
+  static dynamic getUserId() => getString(userId);
+  static dynamic getUserName() => getString(userName);
+  static dynamic getPatientId() => getString(patientId);
+  static dynamic getEmail() => getString(email);
+  static dynamic getMobile() => getString(mobile);
+  static dynamic getFirstName() => getString(firstName);
+  static dynamic getLastName() => getString(lastName);
+  static dynamic getPatientName() => getString(patientName);
+  static dynamic getTokenId() => getString(tokenId);
+  static dynamic getRoleId() => getString(roleId);
+  static dynamic getOrgName() => getString(orgName);
+  static dynamic getOrgServiceProviderId() => getString(orgServiceProviderId);
 }

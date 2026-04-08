@@ -1,6 +1,7 @@
 import 'package:extensions_pro/extensions_pro.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jiveda_appointment/Presentation/screens/OtpVerificationScreen/otp_verification_screen.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
 import 'package:jiveda_appointment/utilities/extension.dart';
@@ -23,14 +24,23 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  bool isButtonEnabled = false;
+  @override
+void initState() {
+  super.initState();
+  final provider = context.read<SendOtpProvider>();
+  provider.mobileController.addListener(() {
+    provider.notifyListeners();
+  });
+}
 
   @override
   Widget build(BuildContext context) {
     final Color scaffoldBgColor = Theme.of(context).scaffoldBackgroundColor;
     final screenWidth = MediaQuery.of(context).size.width;
-    final sendOtpProvider = context.read<SendOtpProvider>();
-    final buttonColor = context.watch<SendOtpProvider>().sendButtonColor;
+    final provider = context.watch<SendOtpProvider>();
+    final sendOtpProvider = provider;
+    final buttonColor = provider.sendButtonColor;
+    final isEnabled = provider.isButtonEnabled;
     return Scaffold(
       body: SafeArea(
         child: Form(
@@ -44,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      SystemNavigator.pop();
                     },
                     child: const Icon(Icons.close, size: 24, color: greyColor),
                   ),
@@ -67,7 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         10.height,
                         const CustomText(
-                          text: "We will send you one time OTP on\nthis mobile number",
+                          text:
+                              "We will send you one time OTP on\nthis mobile number",
                           fontSize: 15,
                           textColor: blackColor,
                           fontWeight: FontWeight.w400,
@@ -83,8 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             textCapitalization: TextCapitalization.none,
                             fillColor: scaffoldBgColor,
                             inputFormatters: InputFormatters.mobileNumber,
-                            validator: (value) =>
-                                Validators.mobileValidation(value!, context),
+                            validator: null,
                             hintStyle: const TextStyle(
                               color: textHintColor,
                               fontSize: 14,
@@ -92,24 +102,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 12,
                             ),
-                            onChanged: (value) {
-                              context.read<SendOtpProvider>().updateButtonState(
-                                value,
-                              );
-                            },
                           ),
                         ),
                         35.height,
                         CustomButton(
                           buttonText: "SEND OTP",
-                          onPress: () {
-                            if (sendOtpProvider.isLoading) return;
-                            if (formKey.currentState!.validate()) {
-                              sendOtpProvider.onSendOtp(() {
-                                context.push(const OtpVerificationScreen());
-                              });
-                            }
-                          },
+                          onPress: () async{
+                            if (!isEnabled || sendOtpProvider.isLoading) return;
+                               final response = await sendOtpProvider.sendOtpApi();
+                                if (response?.success == 1) {
+                                    context.push(const OtpVerificationScreen());
+                                  }
+                               },
                           backgroundColor: buttonColor,
                           foregroundColor: whiteColor,
                           shape: RoundedRectangleBorder(
