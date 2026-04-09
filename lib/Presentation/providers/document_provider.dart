@@ -146,7 +146,7 @@ Future<void> pickFile(int docType, BuildContext context) async {
       }
 
       final request = CorporateDocumentUploadRequestModel(
-        tokenID: "ccc51949-9524-45b9-816a-f26900b8292e",
+        tokenID: Preferences.getTokenId(),
         patientID: int.parse(patientId),
         files: fileList,
       );

@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: AppointmentScreen()
-      // home: SplashScreen()
+      // home: AppointmentScreen()
+      home: SplashScreen()
     );
   }
 }
