@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:jiveda_appointment/api_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:jiveda_appointment/utilities/preferences.dart';
 import '../../Core/network/services.dart';
 import '../model/response/appointment_count_res_model.dart';
 
@@ -13,14 +15,21 @@ class AppointmentCountDatasource {
     try{
       final uri = Uri.parse('$baseUrl/Account/GetUserAppointmentscount').replace(
           queryParameters: {
-            'TokenID': 'ccc51949-9524-45b9-816a-f26900b8292e',
+            'TokenID': Preferences.getTokenId(),
             'LikeSearch': '',
-            'PatientID': '45775',
+            'PatientID': Preferences.getPatientId(),
           }
       );
       final response = await http.get(
           uri,
           headers: headers);
+      if (kDebugMode) {
+        alice.onHttpResponse(response, body: jsonEncode({
+          'TokenID': Preferences.getTokenId(),
+          'LikeSearch': '',
+          'PatientID': Preferences.getPatientId(),
+        }));
+      }
       if(response.statusCode == 200){
         final json = jsonDecode(response.body);
         final result = AppointmentCountResModel.fromJson(json);
