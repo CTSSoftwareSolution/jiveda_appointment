@@ -55,7 +55,7 @@ class Preferences {
   static dynamic getFirstName() => getString(firstName);
   static dynamic getLastName() => getString(lastName);
   static dynamic getPatientName() => getString(patientName);
-  static dynamic getTokenId() => getString(tokenId);
+  static String getTokenId() => getString(tokenId).toString();
   static dynamic getRoleId() => getString(roleId);
   static dynamic getOrgName() => getString(orgName);
   static dynamic getOrgServiceProviderId() => getString(orgServiceProviderId);

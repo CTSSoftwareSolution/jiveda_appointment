@@ -101,7 +101,7 @@ class _DocumentWizardScreenState extends State<DocumentWizardScreen>
             ),
           ),
           // Navigation
-          buildNavigation(context, appointment.appointmentID.toString()),
+          buildNavigation(context, appointment.patientID.toString()),
         ],
       ),
     );

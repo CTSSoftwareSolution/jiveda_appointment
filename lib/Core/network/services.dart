@@ -2,21 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_alice/alice.dart';
+import 'package:jiveda_appointment/utilities/preferences.dart';
 
 const baseUrl = "https://jiveda.in/api/api";
-String? _authToken;
 
 Map<String, String> authHeader = {
   HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
 };
 
-void setToken(String token) {
-_authToken = token;
-}
 
 Map<String, String> get headers => {
-  'Content-Type': 'application/json',
-  'Authorization': 'Bearer ${_authToken ?? ''}',
+  // 'Content-Type': 'application/json',
+  'Authorization': 'Bearer ${Preferences.getTokenId()}',
 };
 
 final navigatorKey = GlobalKey<NavigatorState>();

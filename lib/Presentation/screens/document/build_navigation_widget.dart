@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../utilities/color_data.dart';
 import '../../providers/document_provider.dart';
 
-Widget buildNavigation(BuildContext context, String appointmentId) {
+Widget buildNavigation(BuildContext context, String patientId) {
   final docProvider = context.watch<DocumentProvider>();
   final isLastStep = docProvider.currentStep == docProvider.steps.length - 1;
   final statusColor = docProvider.currentStep == 0
@@ -39,7 +39,7 @@ Widget buildNavigation(BuildContext context, String appointmentId) {
             flex: 2,
             child: ElevatedButton(
               onPressed: isLastStep
-                  ? (docProvider.isSaving ? null : ()=> docProvider.save(context,appointmentId))
+                  ? (docProvider.isSaving ? null : ()=> docProvider.save(context, patientId))
                   : (docProvider.currentStepComplete ? docProvider.next : null),
               style: ElevatedButton.styleFrom(
                 backgroundColor: isLastStep ? greenColor : statusColor,

@@ -126,58 +126,59 @@ Future<void> pickFile(int docType, BuildContext context) async {
   }
 }
 
-  Future<void> save(BuildContext context, String patientId) async {
-    isSaving = true;
-    notifyListeners();
+ Future<void> save(BuildContext context, String patientId) async {
+  isSaving = true;
+  notifyListeners();
 
-    try {
-      List<Files> fileList = [];
+  try {
+    List<Files> fileList = [];
 
-      if (clientPhoto != null) {
-        fileList.add(_prepareFile(clientPhoto!));
-      }
+    if (clientPhoto != null) fileList.add(_prepareFile(clientPhoto!));
+    if (idCardPhoto != null) fileList.add(_prepareFile(idCardPhoto!));
+    if (aadharPhoto != null) fileList.add(_prepareFile(aadharPhoto!));
 
-      if (idCardPhoto != null) {
-        fileList.add(_prepareFile(idCardPhoto!));
-      }
-
-      if (aadharPhoto != null) {
-        fileList.add(_prepareFile(aadharPhoto!));
-      }
-
-      final request = CorporateDocumentUploadRequestModel(
-        tokenID: Preferences.getTokenId(),
-        patientID: int.parse(patientId),
-        files: fileList,
-      );
-
-      final response = await uploadDocumentsUseCase.call(request);
-
-      debugPrint("UPLOAD RESPONSE: $response");
-
-      isSaved = true;
-
-    } catch (e) {
-      showError("Upload failed: $e", context);
+    if (fileList.isEmpty) {
+      showError("Please select at least one file", context);
+      isSaving = false;
+      notifyListeners();
+      return;
     }
 
-    isSaving = false;
-    notifyListeners();
+    final request = CorporateDocumentUploadRequestModel(
+      tokenID: Preferences.getTokenId(),
+      patientID: int.parse(patientId),
+      files: fileList,
+    );
 
-    await Future.delayed(const Duration(seconds: 1));
-    Navigator.pop(context);
+    final response = await uploadDocumentsUseCase.call(request);
+
+    debugPrint("UPLOAD RESPONSE: $response");
+
+    isSaved = true;
+
+  } catch (e) {
+    showError("Upload failed: $e", context);
   }
+
+  isSaving = false;
+  notifyListeners();
+
+  await Future.delayed(const Duration(seconds: 1));
+  Navigator.pop(context);
+}
 
   Files _prepareFile(File file) {
-    String fileName = basename(file.path); 
-    String ext = extension(file.path);
+  String fileName = basename(file.path); 
+  String ext = extension(file.path);
 
-    return Files(
-      fileName: fileName,
-      fileExtension: ext,
-      filePath: file.path, 
-    );
-  }
+  debugPrint("PREPARE FILE: $fileName | $ext | ${file.path}");
+
+  return Files(
+    fileName: fileName,
+    fileExtension: ext,
+    filePath: file.path, 
+  );
+}
 
   void showError(String msg, BuildContext context) {
     ScaffoldMessenger.of(context)
