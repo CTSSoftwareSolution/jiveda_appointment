@@ -39,7 +39,7 @@ Widget buildNavigation(BuildContext context, String appointmentId) {
             flex: 2,
             child: ElevatedButton(
               onPressed: isLastStep
-                  ? (docProvider.isSaving ? null : ()=> docProvider.save(context,appointmentId))
+                  ? (docProvider.isSaving ? null : ()=> docProvider.save(context))
                   : (docProvider.currentStepComplete ? docProvider.next : null),
               style: ElevatedButton.styleFrom(
                 backgroundColor: isLastStep ? greenColor : statusColor,

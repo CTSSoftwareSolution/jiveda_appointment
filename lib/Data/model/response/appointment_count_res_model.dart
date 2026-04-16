@@ -1,4 +1,6 @@
-class AppointmentCountResModel {
+import '../../../Domain/entities/appointment_count_entity.dart';
+
+class AppointmentCountResModel extends AppointmentCountEntity {
   AppointmentCountResModel({
       num? success, 
       List<CountDataModel>? data,

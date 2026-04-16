@@ -1,4 +1,6 @@
-class AppointmentListResModel {
+import '../../../Domain/entities/appointment_list_entity.dart';
+
+class AppointmentListResModel extends AppointmentListEntity {
   AppointmentListResModel({
       num? success, 
       List<AppointmentDataModel>? data,

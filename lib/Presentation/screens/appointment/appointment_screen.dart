@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/Presentation/providers/appointment_count_provider.dart';
 import 'package:jiveda_appointment/Presentation/screens/appointment/shimmer_widget.dart';
 import 'package:jiveda_appointment/utilities/color_data.dart';
+import 'package:jiveda_appointment/utilities/preferences.dart';
 import 'package:jiveda_appointment/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
 import '../../providers/appointment_list_provider.dart';
@@ -23,12 +24,12 @@ class _AppointmentScreenState extends State<AppointmentScreen> with TickerProvid
   @override
   void initState() {
     super.initState();
+    debugPrint("PatientId: ${Preferences.getPatientId()}");
     final listProvider = Provider.of<AppointmentListProvider>(context,listen: false);
     listProvider.tabController = TabController(length: 4, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AppointmentListProvider>().fetchAppointments();
       context.read<AppointmentCountProvider>().fetchCounts();
-
       listProvider.listenTabChanges(context);
     });
   }

@@ -10,7 +10,8 @@ class AppointmentRemoteDataSource {
 
   static Future<List<AppointmentDataModel>> fetchAppointments(String statusId) async {
 
-
+debugPrint("TokenId: ${Preferences.getTokenId()}");
+debugPrint("PatientId: ${Preferences.getPatientId()}");
 
     try{
       final uri = Uri.parse('$baseUrl/Account/GetUserAppointments').replace(

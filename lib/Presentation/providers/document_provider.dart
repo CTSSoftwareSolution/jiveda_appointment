@@ -1,13 +1,22 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jiveda_appointment/Core/network/api_services.dart';
+import 'package:jiveda_appointment/Domain/usecases/upload_document_usecases.dart';
+import 'package:jiveda_appointment/utilities/preferences.dart';
 import 'package:provider/provider.dart';
+import '../../Data/model/request/upload_document_request_model.dart';
 import '../../api_service.dart';
 import '../../utilities/color_data.dart';
 import '../screens/document/step_model.dart';
 import 'appointment_list_provider.dart';
+import 'package:path/path.dart' as path;
 
 class DocumentProvider extends ChangeNotifier {
+
+  final UploadDocumentUseCases uploadDocumentUseCases;
+
+  DocumentProvider({required this.uploadDocumentUseCases});
 
   late Animation<double> progressAnim;
   int currentStep = 0;
@@ -18,6 +27,7 @@ class DocumentProvider extends ChangeNotifier {
   File? aadharPhoto;
   bool isSaving = false;
   bool isSaved = false;
+  List<Files> uploadFiles = [];
 
   final List<StepMeta> steps = [
     StepMeta(
@@ -94,24 +104,63 @@ class DocumentProvider extends ChangeNotifier {
   }
 
 
-  Future<void> save(BuildContext context, String appointmentId) async {
-    final docProvider = Provider.of<DocumentProvider>(context,listen: false);
-     docProvider.isSaving = true;
-    // await ApiService.uploadDocuments(
-    //   appointmentId: appointmentId,
-    //   clientPhotoPath: docProvider.clientPhoto?.path,
-    //   idCardPath: docProvider.idCardPhoto?.path,
-    //   aadharPath: docProvider.aadharPhoto?.path,
-    // );
-    // context.read<AppointmentProvider>().updateAppointmentDocs(
-    //   appointmentId,
-    //   clientPhoto: docProvider.clientPhoto?.path,
-    //   idCard: docProvider.idCardPhoto?.path,
-    //   aadhar: docProvider.aadharPhoto?.path,
-    // );
+  Future<void> save(BuildContext context) async {
 
-      docProvider.isSaving = false;
-      docProvider.isSaved = true;
+     isSaving = true;
+
+     if (clientPhoto != null) {
+       uploadFiles.add(
+         Files(
+           fileName: path.absolute(clientPhoto!.path),
+           fileExtension: path.extension(clientPhoto!.path).replaceFirst('.', ''),
+           filePath: clientPhoto!.path,
+         ),
+       );
+     }
+
+     if (idCardPhoto != null) {
+       uploadFiles.add(
+         Files(
+           fileName: path.absolute(idCardPhoto!.path),
+           fileExtension: path.extension(idCardPhoto!.path).replaceFirst('.', ''),
+           filePath: idCardPhoto!.path,
+         ),
+       );
+     }
+
+     if (aadharPhoto != null) {
+       uploadFiles.add(
+         Files(
+           fileName: path.absolute(aadharPhoto!.path),
+           fileExtension: path.extension(aadharPhoto!.path).replaceFirst('.', ''),
+           filePath: aadharPhoto!.path,
+         ),
+       );
+     }
+
+    try{
+      UploadDocumentRequestModel request = UploadDocumentRequestModel(
+        tokenID: Preferences.getTokenId(),
+        patientID: Preferences.getPatientId(),
+        files: uploadFiles
+      );
+
+      final response = await uploadDocumentUseCases.execute(request);
+
+      if (response.success == 1) {
+        isSaved = true;
+        Navigator.pop(context);
+      } else {
+        showError(response.message ?? "Upload failed", context);
+      }
+
+    } catch (e){
+      showError("Something went wrong: $e", context);
+    }
+
+
+     isSaving = false;
+      isSaved = true;
       notifyListeners();
     await Future.delayed(const Duration(seconds: 1));
     Navigator.pop(context);
