@@ -12,7 +12,7 @@ Map<String, String> authHeader = {
 
 
 Map<String, String> get headers => {
-  // 'Content-Type': 'application/json',
+  ...authHeader,
   'Authorization': 'Bearer ${Preferences.getTokenId()}',
 };
 

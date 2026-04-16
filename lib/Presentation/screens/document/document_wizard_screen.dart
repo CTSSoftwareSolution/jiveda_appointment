@@ -20,10 +20,11 @@ class DocumentWizardScreen extends StatefulWidget {
 
 class _DocumentWizardScreenState extends State<DocumentWizardScreen>
     with SingleTickerProviderStateMixin {
+      late DocumentProvider docProvider;
   @override
   void initState() {
     super.initState();
-    final docProvider = Provider.of<DocumentProvider>(context, listen: false);
+     docProvider = Provider.of<DocumentProvider>(context, listen: false);
     docProvider.animCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
@@ -39,14 +40,14 @@ class _DocumentWizardScreenState extends State<DocumentWizardScreen>
 
   @override
   void dispose() {
-    final docProvider = Provider.of<DocumentProvider>(context, listen: false);
+    // final docProvider = Provider.of<DocumentProvider>(context, listen: false);
     docProvider.animCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final docProvider = context.watch<DocumentProvider>();
+    final provider = context.watch<DocumentProvider>();
     final appointment = context.watch<AppointmentListProvider>().selectedAppointment;
     return Scaffold(
       backgroundColor: surfaceColor,
@@ -71,7 +72,7 @@ class _DocumentWizardScreenState extends State<DocumentWizardScreen>
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
-              child: CustomText(text: 'Step ${docProvider.currentStep + 1}/${docProvider.steps.length}',fontSize: 13.0,fontWeight: FontWeight.w600,textColor: Colors.white70,)
+              child: CustomText(text: 'Step ${provider.currentStep + 1}/${provider.steps.length}',fontSize: 13.0,fontWeight: FontWeight.w600,textColor: Colors.white70,)
 
             ),
           ),
@@ -95,7 +96,7 @@ class _DocumentWizardScreenState extends State<DocumentWizardScreen>
                 child: FadeTransition(opacity: anim, child: child),
               ),
               child: KeyedSubtree(
-                key: ValueKey(docProvider.currentStep),
+                key: ValueKey(provider.currentStep),
                 child: buildStepContent(context),
               ),
             ),

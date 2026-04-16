@@ -5,13 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jiveda_appointment/Core/network/services.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ApiService {
   static Future<dynamic> post(dynamic body, String url) async {
     try {
       debugPrint("API url  $url");
       debugPrint("request ${jsonEncode(body.toJson())}");
-      final response = await http.post(Uri.parse(url), headers: authHeader, body: jsonEncode(body.toJson()),);
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(body.toJson()),
+      );
       if (kDebugMode) {
         debugPrint("Alice called");
         alice.onHttpResponse(response, body: jsonEncode(body.toJson()));
@@ -23,29 +28,59 @@ class ApiService {
     }
   }
 
-  static Future<dynamic> uploadMultipart({required String url, required String tokenID, required String patientID, required List<File> files,}) async {
+  static Future<dynamic> uploadMultipart({
+    required String url,
+    required String tokenID,
+    required String patientID,
+    required List<File> files,
+  }) async {
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(url));
+      final request = http.MultipartRequest('POST', Uri.parse(url));
+
+      request.headers['Authorization'] = 'Bearer ${Preferences.getTokenId()}';
+
       request.fields['tokenID'] = tokenID;
       request.fields['patientID'] = patientID;
-      debugPrint("TOKEN FROM PREF: ${Preferences.getTokenId()}");
-      for (int i = 0; i < files.length; i++) {
-        File file = files[i];
 
-        String fileName = file.path.split('/').last;
-        String extension = fileName.split('.').last;
+      for (int i = 0; i < files.length; i++) {
+        final file = files[i];
+        final fileName = file.path.split('/').last;
+        final extension = fileName.split('.').last;
 
         request.fields['files[$i].fileName'] = fileName;
         request.fields['files[$i].fileExtension'] = '.$extension';
 
+        final type = extension.toLowerCase() == 'pdf'
+            ? MediaType('application', 'pdf')
+            : MediaType('image', 'jpeg');
+
         request.files.add(
-          await http.MultipartFile.fromPath('files[$i].file', file.path,),
+          await http.MultipartFile.fromPath(
+            'files[$i].file',
+            file.path,
+            contentType: type,
+          ),
         );
       }
-      var response = await request.send();
-      var responseData = await response.stream.bytesToString();
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      debugPrint("STATUS CODE: ${response.statusCode}");
+      debugPrint("BODY: ${response.body}");
+
+      if (kDebugMode) {
+        alice.onHttpResponse(
+          response,
+          body: {
+            "fields": request.fields,
+            "files": files.map((e) => e.path).toList(),
+          },
+        );
+      }
+
       if (response.statusCode == 200) {
-        return jsonDecode(responseData);
+        return jsonDecode(response.body);
       } else {
         throw Exception("Upload failed: ${response.statusCode}");
       }
