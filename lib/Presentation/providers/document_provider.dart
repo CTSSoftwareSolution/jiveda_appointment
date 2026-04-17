@@ -111,7 +111,7 @@ class DocumentProvider extends ChangeNotifier {
      if (clientPhoto != null) {
        uploadFiles.add(
          Files(
-           fileName: path.absolute(clientPhoto!.path),
+           fileName: path.basename(clientPhoto!.path),
            fileExtension: path.extension(clientPhoto!.path).replaceFirst('.', ''),
            filePath: clientPhoto!.path,
          ),
@@ -121,7 +121,7 @@ class DocumentProvider extends ChangeNotifier {
      if (idCardPhoto != null) {
        uploadFiles.add(
          Files(
-           fileName: path.absolute(idCardPhoto!.path),
+           fileName: path.basename(idCardPhoto!.path),
            fileExtension: path.extension(idCardPhoto!.path).replaceFirst('.', ''),
            filePath: idCardPhoto!.path,
          ),
@@ -131,7 +131,7 @@ class DocumentProvider extends ChangeNotifier {
      if (aadharPhoto != null) {
        uploadFiles.add(
          Files(
-           fileName: path.absolute(aadharPhoto!.path),
+           fileName: path.basename(aadharPhoto!.path),
            fileExtension: path.extension(aadharPhoto!.path).replaceFirst('.', ''),
            filePath: aadharPhoto!.path,
          ),

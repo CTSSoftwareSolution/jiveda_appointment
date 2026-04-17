@@ -39,12 +39,15 @@ class ApiService {
     request.fields['tokenID'] = tokenId;
     request.fields['patientID'] = patientID;
 
-    for (final file in files) {
+    for (int i = 0; i < files.length; i++) {
+      final file = files[i];
+
       if (file.filePath == null || file.filePath!.isEmpty) continue;
 
       final fileObj = File(file.filePath!);
 
       if (await fileObj.exists()) {
+
         request.files.add(
           await http.MultipartFile.fromPath(
             'files',
@@ -53,10 +56,11 @@ class ApiService {
           ),
         );
 
-        request.fields['fileExtension'] = file.fileExtension ?? '';
+        request.fields['files[$i].fileName'] = file.fileName ?? '';
+        request.fields['files[$i].fileExtension'] = file.fileExtension ?? '';
+        request.fields['files[$i].filePath'] = file.filePath ?? '';
       }
     }
-
 
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
