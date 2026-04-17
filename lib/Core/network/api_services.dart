@@ -35,6 +35,9 @@ class ApiService {
       HttpHeaders.authorizationHeader: 'Bearer ${Preferences.getTokenId()}',
     };
     final request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+
+    final List<Map<String, dynamic>> fileList = [];
+
     request.headers.addAll(headers);
     request.fields['tokenID'] = tokenId;
     request.fields['patientID'] = patientID;
@@ -46,27 +49,54 @@ class ApiService {
 
       final fileObj = File(file.filePath!);
 
+
       if (await fileObj.exists()) {
-
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'files',
-            file.filePath!,
-            filename: file.fileName,
-          ),
-        );
-
-        request.fields['files[$i].fileName'] = file.fileName ?? '';
-        request.fields['files[$i].fileExtension'] = file.fileExtension ?? '';
-        request.fields['files[$i].filePath'] = file.filePath ?? '';
+        fileList.add({
+          "fileName": file.fileName ?? '',
+          "fileExtension": file.fileExtension ?? '',
+          "filePath": file.filePath ?? '',
+        });
       }
     }
 
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
+    final body = {
+      "tokenID": tokenId,
+      "patientID": patientID,
+      "files": fileList,
+    };
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
     if (kDebugMode) {
-      alice.onHttpResponse(response, body: request.fields);
+      alice.onHttpResponse(response, body: body);
     }
+
+
+    // if (await fileObj.exists()) {
+      //
+      //   request.files.add(
+      //     await http.MultipartFile.fromPath(
+      //       'files',
+      //       file.filePath!,
+      //       filename: file.fileName,
+      //     ),
+      //   );
+      //
+      //   request.fields['files[$i].fileName'] = file.fileName ?? '';
+      //   request.fields['files[$i].fileExtension'] = file.fileExtension ?? '';
+      //   request.fields['files[$i].filePath'] = file.filePath ?? '';
+      // }
+ //   }
+
+  //  final streamedResponse = await request.send();
+    // final response = await http.Response.fromStream(streamedResponse);
+    // if (kDebugMode) {
+    //   alice.onHttpResponse(response, body: request.fields);
+    // }
 
     final responseBody = await compute(_decodeResponse, response.bodyBytes);
     return responseBody;
