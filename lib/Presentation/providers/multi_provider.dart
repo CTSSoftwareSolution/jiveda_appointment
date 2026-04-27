@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiveda_appointment/Data/repositories_impl/upload_corporate_patient_document_repositories_impl.dart';
-import 'package:jiveda_appointment/Domain/usecases/upload_corporate_documents_usecase.dart';
+import 'package:jiveda_appointment/Domain/usecases/upload_corporate_document_usecase.dart';
 import 'package:jiveda_appointment/Presentation/providers/bottom_navigation_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/document_provider.dart';
 import 'package:jiveda_appointment/Presentation/providers/send_otp_provider.dart';
@@ -33,7 +33,7 @@ class MultipleProvider extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SplashScreenProvider()),
         ChangeNotifierProvider(create: (_) => AppointmentListProvider(appointmentListUseCases: AppointmentListUseCases(appointmentListRepository: AppointmentListRepositoryImpl()))),
         ChangeNotifierProvider(create: (_) => AppointmentCountProvider(appointmentCountUseCases: AppointmentCountUseCases(appointmentCountRepository: AppointmentCountRepImpl()))),
-        ChangeNotifierProvider(create: (_) => DocumentProvider(UploadDocumentsUseCase(DocumentRepositoryImpl()))),
+        ChangeNotifierProvider(create: (_) => DocumentProvider(UploadCorporateDocumentUseCase(repository: DocumentRepositoryImpl(),),),),
         ChangeNotifierProvider(create: (_) => BottomNavigationProvider()),
         ChangeNotifierProvider(create: (_) => SendOtpProvider(sendOtpUseCase: SendOtpUseCase(sendOtpRepository: SendOtpRepositoryImpl()))),
         ChangeNotifierProvider(create: (_) => VerifyOtpProvider(verifyOtpUseCase: VerifyOtpUseCase(verifyOtpRepository: VerifyOtpRepositoryImpl()))),

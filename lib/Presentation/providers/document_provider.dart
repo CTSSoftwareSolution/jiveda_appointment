@@ -3,7 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jiveda_appointment/Data/model/request/upload_corporate_patient_document_request.dart';
-import 'package:jiveda_appointment/Domain/usecases/upload_corporate_documents_usecase.dart';
+import 'package:jiveda_appointment/Domain/usecases/upload_corporate_document_usecase.dart';
 import 'package:jiveda_appointment/utilities/preferences.dart';
 import 'package:path/path.dart';
 import '../../utilities/color_data.dart';
@@ -23,7 +23,7 @@ class DocumentProvider extends ChangeNotifier {
   bool isSaving = false;
   bool isSaved = false;
 
-  final UploadDocumentsUseCase  uploadDocumentsUseCase;
+  final UploadCorporateDocumentUseCase uploadDocumentsUseCase;
 
   DocumentProvider(this.uploadDocumentsUseCase);
 
@@ -139,8 +139,6 @@ Future<void> pickFile(int docType, BuildContext context) async {
 
     if (fileList.isEmpty) {
       showError("Please select at least one file", context);
-      isSaving = false;
-      notifyListeners();
       return;
     }
 
@@ -150,11 +148,13 @@ Future<void> pickFile(int docType, BuildContext context) async {
       files: fileList,
     );
 
-    final response = await uploadDocumentsUseCase.call(request);
+    final response = await uploadDocumentsUseCase.execute(request);
 
-    debugPrint("UPLOAD RESPONSE: $response");
-
-    isSaved = true;
+    if (response.success == 1) {
+      isSaved = true;
+    } else {
+      showError(response.message ?? "Upload failed", context);
+    }
 
   } catch (e) {
     showError("Upload failed: $e", context);
@@ -168,15 +168,13 @@ Future<void> pickFile(int docType, BuildContext context) async {
 }
 
   Files _prepareFile(File file) {
-  String fileName = basename(file.path); 
+  String nameWithoutExt = basenameWithoutExtension(file.path);
   String ext = extension(file.path);
 
-  debugPrint("PREPARE FILE: $fileName | $ext | ${file.path}");
-
   return Files(
-    fileName: fileName,
-    fileExtension: ext,
-    filePath: file.path, 
+    documentName: nameWithoutExt, 
+    fileExtension: ext,           
+    filePath: file.path,  
   );
 }
 

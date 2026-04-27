@@ -26,4 +26,4 @@ final alice = Alice(
 
 const sendOtpUrl = "$baseUrl/Account/SendOtpToMobile";
 const verifyOtpUrl = "$baseUrl/Account/VerifyOtpAndRegister";
-const uploadCorporatePatientDocumentUrl = "$baseUrl/Mobile/UploadCorporatePatientDocument";
+const uploadCorporatePatientDocumentUrl = "$baseUrl/Report/UploadCorporatePatientDocument";
